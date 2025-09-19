@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CongCu - Giao diện đơn giản</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="brand">Siêu Thị Mini</div>
+        <nav class="nav">
+          <a href="#tinh-nang">Tính năng</a>
+          <a href="#lich-su">Lịch sử giao dịch</a>
+          <a href="#lien-he">Liên hệ</a>
+          <a class="btn" href="#bat-dau">Bắt đầu</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+
+      <section class="transactions" id="lich-su">
+        <div class="container">
+          <div class="section-head">
+            <h2>Lịch sử giao dịch</h2>
+            <div class="filters">
+              <input type="text" placeholder="Tìm kiếm mã/ghi chú..." class="input">
+              <select class="input">
+                <option value="">Tất cả trạng thái</option>
+                <option value="success">Thành công</option>
+                <option value="pending">Đang xử lý</option>
+                <option value="failed">Thất bại</option>
+              </select>
+              <select class="input">
+                <option value="">Tất cả loại</option>
+                <option value="deposit">Nạp</option>
+                <option value="withdraw">Rút</option>
+                <option value="transfer">Chuyển</option>
+              </select>
+              <button class="btn primary">Lọc</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Thời gian</th>
+                  <th>Mã GD</th>
+                  <th>Loại</th>
+                  <th>Số tiền</th>
+                  <th>Trạng thái</th>
+                  <th>Ghi chú</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2025-09-19 10:15</td>
+                  <td>#TXN-00123</td>
+                  <td>Nạp</td>
+                  <td><span class="amount positive">+ 1.200.000₫</span></td>
+                  <td><span class="badge success">Thành công</span></td>
+                  <td>Visa **** 1234</td>
+                </tr>
+                <tr>
+                  <td>2025-09-18 18:42</td>
+                  <td>#TXN-00122</td>
+                  <td>Rút</td>
+                  <td><span class="amount negative">- 500.000₫</span></td>
+                  <td><span class="badge pending">Đang xử lý</span></td>
+                  <td>Về ngân hàng ACB</td>
+                </tr>
+                <tr>
+                  <td>2025-09-17 09:05</td>
+                  <td>#TXN-00121</td>
+                  <td>Chuyển</td>
+                  <td><span class="amount negative">- 200.000₫</span></td>
+                  <td><span class="badge failed">Thất bại</span></td>
+                  <td>Sai số tài khoản</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <button class="btn ghost" disabled>« Trước</button>
+            <span class="page-info">Trang 1 / 10</span>
+            <button class="btn ghost">Sau »</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="lien-he">
+     
+    </footer>
+  </body>
+  </html>
+
+
