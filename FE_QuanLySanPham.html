@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý sản phẩm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-HX8zOXQw0c8wV2a5+LwqZqG8c9WzqQkQd8a4R3L9mVjz+0YxB3m7KqYB2m6EoJm7m5k9Y5p0d7m1y2f3g4h5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #111827;
+      --muted-surface: #0b1220;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --primary: #22c55e;
+      --primary-600: #16a34a;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #06b6d4;
+      --border: #1f2937;
+      --badge-green: #064e3b;
+      --badge-red: #7f1d1d;
+      --shadow: 0 10px 30px rgba(2,6,23,0.6);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
+      background: radial-gradient(1200px 600px at 10% -10%, #111827 20%, #0b1220 60%, #0a0f1e 100%), var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 32px auto;
+      padding: 0 16px;
+    }
+
+    header.header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 16px;
+      z-index: 10;
+      backdrop-filter: blur(6px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand .logo {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--primary), #2dd4bf);
+      color: white;
+      box-shadow: inset 0 0 20px rgba(255,255,255,0.2);
+    }
+    .brand h1 {
+      font-size: 20px; margin: 0;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .brand p { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 14px; border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      color: var(--text); border-radius: 12px; cursor: pointer;
+      transition: transform .08s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.08); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary { background: linear-gradient(180deg, var(--primary), var(--primary-600)); border: none; box-shadow: 0 8px 18px rgba(34,197,94,0.25); }
+    .btn-primary:hover { filter: brightness(1.05); }
+    .btn-danger { background: linear-gradient(180deg, #ef4444, #dc2626); border: none; }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .filters { margin-top: 18px; padding: 16px; display: grid; grid-template-columns: 1fr 180px 180px 180px auto; gap: 12px; }
+    .filters .field { position: relative; }
+    .filters input, .filters select {
+      width: 100%; height: 42px; padding: 10px 36px 10px 40px;
+      background: var(--muted-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; color: var(--text);
+      outline: none; transition: border .2s ease, box-shadow .2s ease;
+    }
+    .filters input:focus, .filters select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(34,197,94,0.15); }
+    .filters .icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+
+    .table-wrap { margin-top: 16px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left; font-weight: 600; color: var(--muted);
+      padding: 14px 12px; border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody td { padding: 14px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+    .product {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .product img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border); background: #0b1325; }
+    .product .name { font-weight: 500; }
+    .muted { color: var(--muted); font-size: 12px; }
+
+    .badge { padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+    .badge.active { background: rgba(34,197,94,0.15); color: #86efac; border: 1px solid rgba(34,197,94,0.35); }
+    .badge.inactive { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); }
+
+    .actions { display: inline-flex; gap: 8px; }
+    .icon-btn { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--border); color: var(--text); background: rgba(255,255,255,0.04); cursor: pointer; }
+    .icon-btn:hover { background: rgba(255,255,255,0.08); }
+
+    .footer { margin-top: 16px; padding: 12px 16px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+
+    /* Modal */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(2,6,23,0.7); display: none; align-items: center; justify-content: center; z-index: 50; }
+    .modal { width: 100%; max-width: 720px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+    .modal header { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid var(--border); }
+    .modal .content { padding: 18px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    .field input, .field select, .field textarea { width: 100%; padding: 10px 12px; background: var(--muted-surface); border: 1px solid var(--border); border-radius: 10px; color: var(--text); outline: none; }
+    .field textarea { min-height: 90px; resize: vertical; }
+    .modal footer { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 18px; border-top: 1px solid var(--border); }
+
+    /* Toasts */
+    .toasts { position: fixed; right: 16px; bottom: 16px; display: grid; gap: 10px; z-index: 60; }
+    .toast { min-width: 240px; max-width: 340px; padding: 12px 14px; border-radius: 12px; background: rgba(17,24,39,0.95); color: var(--text); border: 1px solid var(--border); box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
+    .toast.success { border-color: rgba(34,197,94,0.5); }
+    .toast.error { border-color: rgba(239,68,68,0.5); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .filters { grid-template-columns: 1fr 1fr; }
+      .filters .actions { grid-column: 1 / -1; justify-content: flex-end; }
+    }
+    @media (max-width: 640px) {
+      header.header { flex-direction: column; align-items: flex-start; position: static; }
+      .grid { grid-template-columns: 1fr; }
+      .filters { grid-template-columns: 1fr; }
+      thead { display: none; }
+      table, tbody, tr, td { display: block; width: 100%; }
+      tbody tr { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+      tbody td { border: none; padding: 10px 12px; }
+      tbody td::before { content: attr(data-label); display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+      .actions { justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header card">
+      <div class="brand">
+        <div class="logo"><i class="fa-solid fa-cubes"></i></div>
+        <div>
+          <h1>Quản lý sản phẩm</h1>
+          <p>Quản trị tồn kho, giá bán và trạng thái nhanh chóng</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn" id="btnExport" title="Xuất JSON"><i class="fa-solid fa-file-export"></i><span class="hide-sm">Xuất</span></button>
+        <button class="btn btn-primary" id="btnAdd"><i class="fa-solid fa-plus"></i><span class="hide-sm">Thêm sản phẩm</span></button>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="filters">
+        <div class="field">
+          <i class="fa-solid fa-magnifying-glass icon"></i>
+          <input id="searchInput" type="text" placeholder="Tìm theo tên, danh mục...">
+        </div>
+        <div class="field">
+          <i class="fa-solid fa-layer-group icon"></i>
+          <select id="categoryFilter">
+            <option value="">Tất cả danh mục</option>
+          </select>
+        </div>
+        <div class="field">
+          <i class="fa-solid fa-toggle-on icon"></i>
+          <select id="statusFilter">
+            <option value="">Tất cả trạng thái</option>
+            <option value="active">Đang bán</option>
+            <option value="inactive">Ngừng bán</option>
+          </select>
+        </div>
+        <div class="field">
+          <i class="fa-solid fa-arrow-down-short-wide icon"></i>
+          <select id="sortSelect">
+            <option value="">Sắp xếp</option>
+            <option value="name-asc">Tên A→Z</option>
+            <option value="name-desc">Tên Z→A</option>
+            <option value="price-asc">Giá tăng dần</option>
+            <option value="price-desc">Giá giảm dần</option>
+            <option value="stock-asc">Tồn kho tăng</option>
+            <option value="stock-desc">Tồn kho giảm</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btnReset"><i class="fa-solid fa-rotate"></i><span class="hide-sm">Làm mới</span></button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Sản phẩm</th>
+              <th>Danh mục</th>
+              <th>Giá bán</th>
+              <th>Tồn kho</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="productBody"></tbody>
+        </table>
+      </div>
+
+      <div class="footer">
+        <div><span id="count"></span> sản phẩm</div>
+        <div class="muted">Dữ liệu lưu trong LocalStorage</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <header>
+        <strong id="modalTitle">Thêm sản phẩm</strong>
+        <button class="icon-btn" id="btnCloseModal" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+      <div class="content">
+        <form id="productForm">
+          <input type="hidden" id="productId">
+          <div class="grid">
+            <div class="field">
+              <label for="name">Tên sản phẩm</label>
+              <input type="text" id="name" required placeholder="Ví dụ: Chuột gaming RGB">
+            </div>
+            <div class="field">
+              <label for="category">Danh mục</label>
+              <input type="text" id="category" list="categoryList" required placeholder="Ví dụ: Phụ kiện">
+              <datalist id="categoryList"></datalist>
+            </div>
+            <div class="field">
+              <label for="price">Giá bán (VND)</label>
+              <input type="number" id="price" required min="0" step="1000" placeholder="100000">
+            </div>
+            <div class="field">
+              <label for="stock">Tồn kho</label>
+              <input type="number" id="stock" required min="0" step="1" placeholder="50">
+            </div>
+            <div class="field">
+              <label for="status">Trạng thái</label>
+              <select id="status" required>
+                <option value="active">Đang bán</option>
+                <option value="inactive">Ngừng bán</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="image">Ảnh (URL)</label>
+              <input type="url" id="image" placeholder="https://...jpg">
+            </div>
+          </div>
+          <div class="field" style="margin-top:12px;">
+            <label for="description">Mô tả</label>
+            <textarea id="description" placeholder="Mô tả ngắn cho sản phẩm..."></textarea>
+          </div>
+        </form>
+      </div>
+      <footer>
+        <button class="btn" id="btnResetForm"><i class="fa-solid fa-eraser"></i>Xóa nhập</button>
+        <button class="btn btn-primary" id="btnSave"><i class="fa-solid fa-floppy-disk"></i>Lưu</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toasts" id="toasts"></div>
+
+  <script>
+    const STORAGE_KEY = 'products';
+    const CATEGORIES_KEY = 'product_categories';
+
+    const el = {
+      body: document.getElementById('productBody'),
+      count: document.getElementById('count'),
+      search: document.getElementById('searchInput'),
+      categoryFilter: document.getElementById('categoryFilter'),
+      statusFilter: document.getElementById('statusFilter'),
+      sort: document.getElementById('sortSelect'),
+      btnAdd: document.getElementById('btnAdd'),
+      btnReset: document.getElementById('btnReset'),
+      btnExport: document.getElementById('btnExport'),
+      // modal
+      modalBackdrop: document.getElementById('modalBackdrop'),
+      btnCloseModal: document.getElementById('btnCloseModal'),
+      modalTitle: document.getElementById('modalTitle'),
+      form: document.getElementById('productForm'),
+      productId: document.getElementById('productId'),
+      name: document.getElementById('name'),
+      category: document.getElementById('category'),
+      categoryList: document.getElementById('categoryList'),
+      price: document.getElementById('price'),
+      stock: document.getElementById('stock'),
+      status: document.getElementById('status'),
+      image: document.getElementById('image'),
+      description: document.getElementById('description'),
+      btnSave: document.getElementById('btnSave'),
+      btnResetForm: document.getElementById('btnResetForm'),
+      toasts: document.getElementById('toasts')
+    };
+
+    const currency = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i><div>${message}</div>`;
+      el.toasts.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(10px)'; }, 2500);
+      setTimeout(() => toast.remove(), 3200);
+    }
+
+    function readStorage(key, fallback) {
+      try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; } catch { return fallback; }
+    }
+    function writeStorage(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+
+    function seedSampleData() {
+      const existing = readStorage(STORAGE_KEY);
+      if (existing && existing.length) return existing;
+      const sample = [
+        { id: crypto.randomUUID(), name: 'Chuột gaming RGB X5', category: 'Phụ kiện', price: 399000, stock: 120, status: 'active', image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=400&auto=format&fit=crop', description: 'Chuột gaming 6 nút, DPI 6400, led RGB 16.7M' },
+        { id: crypto.randomUUID(), name: 'Bàn phím cơ K87', category: 'Phụ kiện', price: 890000, stock: 40, status: 'active', image: 'https://images.unsplash.com/photo-1517059224940-d4af9eec41e5?q=80&w=400&auto=format&fit=crop', description: 'Bàn phím cơ 87 phím, switch Blue/Red' },
+        { id: crypto.randomUUID(), name: 'Màn hình 27" 2K 165Hz', category: 'Màn hình', price: 4990000, stock: 12, status: 'active', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=400&auto=format&fit=crop', description: 'Tấm nền IPS, viền mỏng, gaming 165Hz' },
+        { id: crypto.randomUUID(), name: 'Tai nghe không dây A1', category: 'Âm thanh', price: 1290000, stock: 25, status: 'inactive', image: 'https://images.unsplash.com/photo-1518442253011-1f4f215c0b0e?q=80&w=400&auto=format&fit=crop', description: 'Bluetooth 5.3, pin 30h, chống ồn ENC' },
+        { id: crypto.randomUUID(), name: 'Ổ cứng SSD NVMe 1TB', category: 'Lưu trữ', price: 1690000, stock: 60, status: 'active', image: 'https://images.unsplash.com/photo-1613451783328-0f61f4e78828?q=80&w=400&auto=format&fit=crop', description: 'Tốc độ đọc 3500MB/s, bảo hành 5 năm' }
+      ];
+      writeStorage(STORAGE_KEY, sample);
+      const cats = Array.from(new Set(sample.map(p => p.category)));
+      writeStorage(CATEGORIES_KEY, cats);
+      return sample;
+    }
+
+    function ensureCategories(products) {
+      const cats = Array.from(new Set(products.map(p => p.category))).sort();
+      writeStorage(CATEGORIES_KEY, cats);
+      return cats;
+    }
+
+    function renderCategoryOptions() {
+      const cats = readStorage(CATEGORIES_KEY, []);
+      el.categoryFilter.innerHTML = '<option value="">Tất cả danh mục</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+      el.categoryList.innerHTML = cats.map(c => `<option value="${c}"></option>`).join('');
+    }
+
+    function getProducts() { return readStorage(STORAGE_KEY, []); }
+    function setProducts(list) { writeStorage(STORAGE_KEY, list); render(); }
+
+    function applyFilters(list) {
+      const keyword = el.search.value.trim().toLowerCase();
+      const cat = el.categoryFilter.value;
+      const st = el.statusFilter.value;
+      let filtered = list.filter(p => {
+        const okKeyword = !keyword || [p.name, p.category, p.description || ''].join(' ').toLowerCase().includes(keyword);
+        const okCat = !cat || p.category === cat;
+        const okSt = !st || p.status === st;
+        return okKeyword && okCat && okSt;
+      });
+      const sort = el.sort.value;
+      const map = {
+        'name-asc': (a,b) => a.name.localeCompare(b.name),
+        'name-desc': (a,b) => b.name.localeCompare(a.name),
+        'price-asc': (a,b) => a.price - b.price,
+        'price-desc': (a,b) => b.price - a.price,
+        'stock-asc': (a,b) => a.stock - b.stock,
+        'stock-desc': (a,b) => b.stock - a.stock
+      };
+      if (map[sort]) filtered = filtered.slice().sort(map[sort]);
+      return filtered;
+    }
+
+    function render() {
+      const products = getProducts();
+      ensureCategories(products);
+      renderCategoryOptions();
+      const list = applyFilters(products);
+      el.count.textContent = list.length;
+      el.body.innerHTML = list.map(p => renderRow(p)).join('');
+    }
+
+    function renderRow(p) {
+      const statusBadge = p.status === 'active'
+        ? `<span class="badge active"><i class="fa-solid fa-circle"></i>Đang bán</span>`
+        : `<span class="badge inactive"><i class="fa-solid fa-circle"></i>Ngừng bán</span>`;
+      return `
+        <tr>
+          <td data-label="Sản phẩm">
+            <div class="product">
+              <img src="${p.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop'}" alt="${p.name}">
+              <div>
+                <div class="name">${p.name}</div>
+                <div class="muted">${p.description ? p.description : ''}</div>
+              </div>
+            </div>
+          </td>
+          <td data-label="Danh mục">${p.category}</td>
+          <td data-label="Giá bán">${currency.format(p.price)}</td>
+          <td data-label="Tồn kho">${p.stock}</td>
+          <td data-label="Trạng thái">${statusBadge}</td>
+          <td data-label="Thao tác">
+            <div class="actions">
+              <button class="icon-btn" title="Sửa" onclick="onEdit('${p.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn" title="Xóa" onclick="onDelete('${p.id}')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
+    // Modal controls
+    function openModal(title = 'Thêm sản phẩm') {
+      el.modalTitle.textContent = title;
+      el.modalBackdrop.style.display = 'flex';
+    }
+    function closeModal() {
+      el.modalBackdrop.style.display = 'none';
+    }
+
+    function resetForm() {
+      el.form.reset();
+      el.productId.value = '';
+    }
+
+    // CRUD
+    function onAdd() {
+      resetForm();
+      openModal('Thêm sản phẩm');
+      el.name.focus();
+    }
+
+    function onEdit(id) {
+      const products = getProducts();
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+      el.productId.value = p.id;
+      el.name.value = p.name;
+      el.category.value = p.category;
+      el.price.value = p.price;
+      el.stock.value = p.stock;
+      el.status.value = p.status;
+      el.image.value = p.image || '';
+      el.description.value = p.description || '';
+      openModal('Sửa sản phẩm');
+    }
+
+    function onDelete(id) {
+      const products = getProducts();
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+      if (!confirm(`Xóa sản phẩm: ${p.name}?`)) return;
+      const next = products.filter(x => x.id !== id);
+      setProducts(next);
+      showToast('Đã xóa sản phẩm');
+    }
+
+    function onSave() {
+      const data = {
+        id: el.productId.value || crypto.randomUUID(),
+        name: el.name.value.trim(),
+        category: el.category.value.trim(),
+        price: Number(el.price.value || 0),
+        stock: Number(el.stock.value || 0),
+        status: el.status.value,
+        image: el.image.value.trim(),
+        description: el.description.value.trim()
+      };
+      if (!data.name || !data.category) { showToast('Vui lòng nhập tên và danh mục', 'error'); return; }
+      const products = getProducts();
+      const existsIdx = products.findIndex(p => p.id === data.id);
+      let next;
+      if (existsIdx >= 0) {
+        next = products.slice();
+        next[existsIdx] = data;
+        showToast('Đã cập nhật sản phẩm');
+      } else {
+        next = [{...data}, ...products];
+        showToast('Đã thêm sản phẩm mới');
+      }
+      setProducts(next);
+      // update categories
+      const cats = ensureCategories(next);
+      if (!cats.includes(data.category)) cats.push(data.category);
+      writeStorage(CATEGORIES_KEY, Array.from(new Set(cats)).sort());
+      renderCategoryOptions();
+      closeModal();
+    }
+
+    function onExport() {
+      const data = JSON.stringify(getProducts(), null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'products.json'; a.click();
+      URL.revokeObjectURL(url);
+      showToast('Đã xuất dữ liệu JSON');
+    }
+
+    function onResetFilters() {
+      el.search.value = '';
+      el.categoryFilter.value = '';
+      el.statusFilter.value = '';
+      el.sort.value = '';
+      render();
+    }
+
+    // Events
+    el.btnAdd.addEventListener('click', onAdd);
+    el.btnExport.addEventListener('click', onExport);
+    el.btnReset.addEventListener('click', onResetFilters);
+    el.btnCloseModal.addEventListener('click', closeModal);
+    el.btnSave.addEventListener('click', onSave);
+    el.btnResetForm.addEventListener('click', resetForm);
+    el.modalBackdrop.addEventListener('click', (e) => { if (e.target === el.modalBackdrop) closeModal(); });
+    el.search.addEventListener('input', render);
+    el.categoryFilter.addEventListener('change', render);
+    el.statusFilter.addEventListener('change', render);
+    el.sort.addEventListener('change', render);
+
+    // Init
+    (function init() {
+      const products = seedSampleData();
+      ensureCategories(products);
+      render();
+    })();
+
+    // expose for inline handlers
+    window.onEdit = onEdit;
+    window.onDelete = onDelete;
+  </script>
+</body>
+</html>
+
+
+
+

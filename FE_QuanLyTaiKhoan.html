@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý tài khoản</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #111827;
+      --muted-surface: #0b1220;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-600: #4f46e5;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --border: #1f2937;
+      --shadow: 0 10px 30px rgba(2,6,23,0.6);
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans';
+      background: radial-gradient(1200px 600px at 10% -10%, #111827 20%, #0b1220 60%, #0a0f1e 100%), var(--bg);
+      color: var(--text);
+    }
+    .container { max-width: 1200px; margin: 32px auto; padding: 0 16px; }
+    header.header { display:flex; align-items:center; justify-content:space-between; gap:12px; background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border:1px solid var(--border); padding:16px 20px; border-radius: var(--radius); box-shadow: var(--shadow); position: sticky; top:16px; z-index:10; backdrop-filter: blur(6px); }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand .logo { width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background: linear-gradient(135deg, var(--primary), #14b8a6); color:white; box-shadow: inset 0 0 20px rgba(255,255,255,0.2); }
+    .brand h1 { font-size:20px; margin:0; font-weight:600; letter-spacing:0.3px; }
+    .brand p { margin:0; color:var(--muted); font-size:12px; }
+    .header-actions { display:flex; gap:10px; align-items:center; }
+    .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border:1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); color:var(--text); border-radius:12px; cursor:pointer; transition: transform .08s ease, background .2s ease, box-shadow .2s ease; }
+    .btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.08); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary { background: linear-gradient(180deg, var(--primary), var(--primary-600)); border:none; box-shadow: 0 8px 18px rgba(99,102,241,0.25); }
+    .btn-danger { background: linear-gradient(180deg, #ef4444, #dc2626); border:none; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border:1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .filters { margin-top:18px; padding:16px; display:grid; grid-template-columns: 1fr 180px 180px 180px auto; gap:12px; }
+    .filters .field { position:relative; }
+    .filters input, .filters select { width:100%; height:42px; padding:10px 36px 10px 40px; background: var(--muted-surface); border:1px solid var(--border); border-radius:12px; color:var(--text); outline:none; }
+    .filters input:focus, .filters select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+    .filters .icon { position:absolute; left:12px; top:50%; transform: translateY(-50%); color:var(--muted); }
+    .table-wrap { margin-top:16px; overflow-x:auto; }
+    table { width:100%; border-collapse: collapse; }
+    thead th { text-align:left; font-weight:600; color:var(--muted); padding:14px 12px; border-bottom:1px solid var(--border); white-space:nowrap; }
+    tbody td { padding:14px 12px; border-bottom:1px solid var(--border); vertical-align: middle; }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+    .user { display:flex; align-items:center; gap:12px; }
+    .avatar { width:40px; height:40px; border-radius:50%; background: #0b1325; display:grid; place-items:center; border:1px solid var(--border); overflow:hidden; }
+    .avatar img { width:100%; height:100%; object-fit: cover; }
+    .name { font-weight:500; }
+    .muted { color:var(--muted); font-size:12px; }
+    .badge { padding:6px 10px; border-radius:999px; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:6px; }
+    .badge.active { background: rgba(34,197,94,0.15); color:#86efac; border:1px solid rgba(34,197,94,0.35); }
+    .badge.inactive { background: rgba(239,68,68,0.15); color:#fca5a5; border:1px solid rgba(239,68,68,0.35); }
+    .badge.role-admin { background: rgba(99,102,241,0.15); color:#c7d2fe; border:1px solid rgba(99,102,241,0.35); }
+    .badge.role-staff { background: rgba(14,165,233,0.15); color:#bae6fd; border:1px solid rgba(14,165,233,0.35); }
+    .badge.role-customer { background: rgba(245,158,11,0.15); color:#fde68a; border:1px solid rgba(245,158,11,0.35); }
+    .actions { display:inline-flex; gap:8px; }
+    .icon-btn { width:36px; height:36px; display:grid; place-items:center; border-radius:10px; border:1px solid var(--border); color:var(--text); background: rgba(255,255,255,0.04); cursor:pointer; }
+    .icon-btn:hover { background: rgba(255,255,255,0.08); }
+    .footer { margin-top:16px; padding:12px 16px; color:var(--muted); display:flex; justify-content:space-between; align-items:center; }
+    /* Modal */
+    .modal-backdrop { position:fixed; inset:0; background: rgba(2,6,23,0.7); display:none; align-items:center; justify-content:center; z-index:50; }
+    .modal { width:100%; max-width:720px; background: var(--card); border:1px solid var(--border); border-radius:16px; box-shadow: var(--shadow); }
+    .modal header { display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--border); }
+    .modal .content { padding:18px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .field label { display:block; font-size:13px; color:var(--muted); margin-bottom:6px; }
+    .field input, .field select, .field textarea { width:100%; padding:10px 12px; background: var(--muted-surface); border:1px solid var(--border); border-radius:10px; color:var(--text); outline:none; }
+    .field textarea { min-height:90px; resize:vertical; }
+    .modal footer { display:flex; justify-content:flex-end; gap:10px; padding:14px 18px; border-top:1px solid var(--border); }
+    /* Toasts */
+    .toasts { position:fixed; right:16px; bottom:16px; display:grid; gap:10px; z-index:60; }
+    .toast { min-width:240px; max-width:340px; padding:12px 14px; border-radius:12px; background: rgba(17,24,39,0.95); color:var(--text); border:1px solid var(--border); box-shadow: var(--shadow); display:flex; align-items:center; gap:10px; }
+    .toast.success { border-color: rgba(34,197,94,0.5); }
+    .toast.error { border-color: rgba(239,68,68,0.5); }
+    /* Responsive */
+    @media (max-width: 1024px) { .filters { grid-template-columns: 1fr 1fr; } .filters .actions { grid-column: 1 / -1; justify-content:flex-end; } }
+    @media (max-width: 640px) {
+      header.header { flex-direction:column; align-items:flex-start; position:static; }
+      .grid { grid-template-columns:1fr; }
+      .filters { grid-template-columns:1fr; }
+      thead { display:none; }
+      table, tbody, tr, td { display:block; width:100%; }
+      tbody tr { border:1px solid var(--border); border-radius:12px; margin-bottom:10px; overflow:hidden; }
+      tbody td { border:none; padding:10px 12px; }
+      tbody td::before { content: attr(data-label); display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
+      .actions { justify-content:flex-end; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header card">
+      <div class="brand">
+        <div class="logo"><i class="fa-solid fa-users"></i></div>
+        <div>
+          <h1>Quản lý tài khoản</h1>
+          <p>Quản trị người dùng, vai trò và trạng thái</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn" id="btnExport" title="Xuất JSON"><i class="fa-solid fa-file-export"></i><span class="hide-sm">Xuất</span></button>
+        <button class="btn btn-primary" id="btnAdd"><i class="fa-solid fa-user-plus"></i><span class="hide-sm">Thêm tài khoản</span></button>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="filters">
+        <div class="field">
+          <i class="fa-solid fa-magnifying-glass icon"></i>
+          <input id="searchInput" type="text" placeholder="Tìm theo tên, email, số điện thoại...">
+        </div>
+        <div class="field">
+          <i class="fa-solid fa-user-gear icon"></i>
+          <select id="roleFilter">
+            <option value="">Tất cả vai trò</option>
+            <option value="admin">Admin</option>
+            <option value="staff">Nhân viên</option>
+            <option value="customer">Khách hàng</option>
+          </select>
+        </div>
+        <div class="field">
+          <i class="fa-solid fa-toggle-on icon"></i>
+          <select id="statusFilter">
+            <option value="">Tất cả trạng thái</option>
+            <option value="active">Hoạt động</option>
+            <option value="inactive">Khoá</option>
+          </select>
+        </div>
+        <div class="field">
+          <i class="fa-solid fa-arrow-down-short-wide icon"></i>
+          <select id="sortSelect">
+            <option value="">Sắp xếp</option>
+            <option value="name-asc">Tên A→Z</option>
+            <option value="name-desc">Tên Z→A</option>
+            <option value="role-asc">Vai trò A→Z</option>
+            <option value="role-desc">Vai trò Z→A</option>
+            <option value="created-desc">Mới nhất</option>
+            <option value="created-asc">Cũ nhất</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btnReset"><i class="fa-solid fa-rotate"></i><span class="hide-sm">Làm mới</span></button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Người dùng</th>
+              <th>Email</th>
+              <th>Điện thoại</th>
+              <th>Vai trò</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="userBody"></tbody>
+        </table>
+      </div>
+
+      <div class="footer">
+        <div><span id="count"></span> tài khoản</div>
+        <div class="muted">Dữ liệu lưu trong LocalStorage</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <header>
+        <strong id="modalTitle">Thêm tài khoản</strong>
+        <button class="icon-btn" id="btnCloseModal" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+      <div class="content">
+        <form id="userForm">
+          <input type="hidden" id="userId">
+          <div class="grid">
+            <div class="field">
+              <label for="fullName">Họ và tên</label>
+              <input type="text" id="fullName" required placeholder="Ví dụ: Trần Tấn Nguyên">
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" required placeholder="email@domain.com">
+            </div>
+            <div class="field">
+              <label for="phone">Điện thoại</label>
+              <input type="tel" id="phone" placeholder="0901 234 567" pattern="[0-9\s+()-]{8,}">
+            </div>
+            <div class="field">
+              <label for="role">Vai trò</label>
+              <select id="role" required>
+                <option value="admin">Admin</option>
+                <option value="staff">Nhân viên</option>
+                <option value="customer">Khách hàng</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="status">Trạng thái</label>
+              <select id="status" required>
+                <option value="active">Hoạt động</option>
+                <option value="inactive">Khoá</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="avatar">Ảnh đại diện (URL)</label>
+              <input type="url" id="avatar" placeholder="https://...jpg">
+            </div>
+          </div>
+          <div class="field" style="margin-top:12px;">
+            <label for="note">Ghi chú</label>
+            <textarea id="note" placeholder="Ghi chú cho tài khoản..."></textarea>
+          </div>
+        </form>
+      </div>
+      <footer>
+        <button class="btn" id="btnResetForm"><i class="fa-solid fa-eraser"></i>Xóa nhập</button>
+        <button class="btn btn-primary" id="btnSave"><i class="fa-solid fa-floppy-disk"></i>Lưu</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toasts" id="toasts"></div>
+
+  <script>
+    const STORAGE_KEY = 'users';
+    const el = {
+      body: document.getElementById('userBody'),
+      count: document.getElementById('count'),
+      search: document.getElementById('searchInput'),
+      roleFilter: document.getElementById('roleFilter'),
+      statusFilter: document.getElementById('statusFilter'),
+      sort: document.getElementById('sortSelect'),
+      btnAdd: document.getElementById('btnAdd'),
+      btnReset: document.getElementById('btnReset'),
+      btnExport: document.getElementById('btnExport'),
+      // modal
+      modalBackdrop: document.getElementById('modalBackdrop'),
+      btnCloseModal: document.getElementById('btnCloseModal'),
+      modalTitle: document.getElementById('modalTitle'),
+      form: document.getElementById('userForm'),
+      userId: document.getElementById('userId'),
+      fullName: document.getElementById('fullName'),
+      email: document.getElementById('email'),
+      phone: document.getElementById('phone'),
+      role: document.getElementById('role'),
+      status: document.getElementById('status'),
+      avatar: document.getElementById('avatar'),
+      note: document.getElementById('note'),
+      btnSave: document.getElementById('btnSave'),
+      btnResetForm: document.getElementById('btnResetForm'),
+      toasts: document.getElementById('toasts')
+    };
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i><div>${message}</div>`;
+      el.toasts.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(10px)'; }, 2500);
+      setTimeout(() => toast.remove(), 3200);
+    }
+
+    function readStorage(key, fallback) { try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; } catch { return fallback; } }
+    function writeStorage(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+
+    function randomAvatar(seed) { return `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(seed)}`; }
+
+    function seedSampleUsers() {
+      const existing = readStorage(STORAGE_KEY);
+      if (existing && existing.length) return existing;
+      const now = Date.now();
+      const sample = [
+        { id: crypto.randomUUID(), fullName: 'Nguyễn Văn A', email: 'admin@example.com', phone: '0901234567', role: 'admin', status: 'active', avatar: randomAvatar('Nguyễn Văn A'), note: 'Quản trị hệ thống', createdAt: now - 1000 * 60 * 60 * 24 * 10 },
+        { id: crypto.randomUUID(), fullName: 'Trần Thị B', email: 'staff1@example.com', phone: '0907654321', role: 'staff', status: 'active', avatar: randomAvatar('Trần Thị B'), note: 'CSKH', createdAt: now - 1000 * 60 * 60 * 24 * 5 },
+        { id: crypto.randomUUID(), fullName: 'Lê Minh C', email: 'staff2@example.com', phone: '0912345678', role: 'staff', status: 'inactive', avatar: randomAvatar('Lê Minh C'), note: 'Nghỉ phép dài hạn', createdAt: now - 1000 * 60 * 60 * 24 * 20 },
+        { id: crypto.randomUUID(), fullName: 'Phạm Thảo D', email: 'customer1@example.com', phone: '0987654321', role: 'customer', status: 'active', avatar: randomAvatar('Phạm Thảo D'), note: '', createdAt: now - 1000 * 60 * 60 * 6 },
+        { id: crypto.randomUUID(), fullName: 'Bùi Quốc E', email: 'customer2@example.com', phone: '0978123456', role: 'customer', status: 'active', avatar: randomAvatar('Bùi Quốc E'), note: '', createdAt: now - 1000 * 60 * 60 * 48 }
+      ];
+      writeStorage(STORAGE_KEY, sample);
+      return sample;
+    }
+
+    function getUsers() { return readStorage(STORAGE_KEY, []); }
+    function setUsers(list) { writeStorage(STORAGE_KEY, list); render(); }
+
+    function applyFilters(list) {
+      const keyword = el.search.value.trim().toLowerCase();
+      const role = el.roleFilter.value;
+      const st = el.statusFilter.value;
+      let filtered = list.filter(u => {
+        const okKeyword = !keyword || [u.fullName, u.email, u.phone || '', u.note || ''].join(' ').toLowerCase().includes(keyword);
+        const okRole = !role || u.role === role;
+        const okSt = !st || u.status === st;
+        return okKeyword && okRole && okSt;
+      });
+      const sort = el.sort.value;
+      const map = {
+        'name-asc': (a,b) => a.fullName.localeCompare(b.fullName),
+        'name-desc': (a,b) => b.fullName.localeCompare(a.fullName),
+        'role-asc': (a,b) => a.role.localeCompare(b.role),
+        'role-desc': (a,b) => b.role.localeCompare(a.role),
+        'created-asc': (a,b) => (a.createdAt||0) - (b.createdAt||0),
+        'created-desc': (a,b) => (b.createdAt||0) - (a.createdAt||0)
+      };
+      if (map[sort]) filtered = filtered.slice().sort(map[sort]);
+      return filtered;
+    }
+
+    function roleBadge(role) {
+      const map = {
+        admin: { cls: 'role-admin', label: 'Admin', icon: 'fa-user-shield' },
+        staff: { cls: 'role-staff', label: 'Nhân viên', icon: 'fa-id-badge' },
+        customer: { cls: 'role-customer', label: 'Khách hàng', icon: 'fa-user' }
+      };
+      const r = map[role] || map.customer;
+      return `<span class="badge ${r.cls}"><i class="fa-solid ${r.icon}"></i>${r.label}</span>`;
+    }
+
+    function statusBadge(status) {
+      return status === 'active'
+        ? `<span class="badge active"><i class="fa-solid fa-circle"></i>Hoạt động</span>`
+        : `<span class="badge inactive"><i class="fa-solid fa-circle"></i>Khoá</span>`;
+    }
+
+    function renderRow(u) {
+      return `
+        <tr>
+          <td data-label="Người dùng">
+            <div class="user">
+              <div class="avatar">${u.avatar ? `<img src="${u.avatar}" alt="${u.fullName}">` : `<i class=\"fa-solid fa-user\"></i>`}</div>
+              <div>
+                <div class="name">${u.fullName}</div>
+                <div class="muted">${u.note ? u.note : ''}</div>
+              </div>
+            </div>
+          </td>
+          <td data-label="Email">${u.email}</td>
+          <td data-label="Điện thoại">${u.phone || ''}</td>
+          <td data-label="Vai trò">${roleBadge(u.role)}</td>
+          <td data-label="Trạng thái">${statusBadge(u.status)}</td>
+          <td data-label="Thao tác">
+            <div class="actions">
+              <button class="icon-btn" title="Sửa" onclick="onEdit('${u.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn" title="Xóa" onclick="onDelete('${u.id}')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
+    function render() {
+      const users = getUsers();
+      const list = applyFilters(users);
+      el.count.textContent = list.length;
+      el.body.innerHTML = list.map(u => renderRow(u)).join('');
+    }
+
+    // Modal controls
+    function openModal(title = 'Thêm tài khoản') { el.modalTitle.textContent = title; el.modalBackdrop.style.display = 'flex'; }
+    function closeModal() { el.modalBackdrop.style.display = 'none'; }
+    function resetForm() { el.form.reset(); el.userId.value = ''; }
+
+    // CRUD
+    function onAdd() { resetForm(); openModal('Thêm tài khoản'); el.fullName.focus(); }
+    function onEdit(id) {
+      const users = getUsers();
+      const u = users.find(x => x.id === id);
+      if (!u) return;
+      el.userId.value = u.id;
+      el.fullName.value = u.fullName;
+      el.email.value = u.email;
+      el.phone.value = u.phone || '';
+      el.role.value = u.role;
+      el.status.value = u.status;
+      el.avatar.value = u.avatar || '';
+      el.note.value = u.note || '';
+      openModal('Sửa tài khoản');
+    }
+    function onDelete(id) {
+      const users = getUsers();
+      const u = users.find(x => x.id === id);
+      if (!u) return;
+      if (!confirm(`Xóa tài khoản: ${u.fullName}?`)) return;
+      const next = users.filter(x => x.id !== id);
+      setUsers(next);
+      showToast('Đã xóa tài khoản');
+    }
+    function onSave() {
+      const data = {
+        id: el.userId.value || crypto.randomUUID(),
+        fullName: el.fullName.value.trim(),
+        email: el.email.value.trim(),
+        phone: el.phone.value.trim(),
+        role: el.role.value,
+        status: el.status.value,
+        avatar: el.avatar.value.trim(),
+        note: el.note.value.trim(),
+        createdAt: el.userId.value ? (getUsers().find(x => x.id === el.userId.value)?.createdAt || Date.now()) : Date.now()
+      };
+      if (!data.fullName || !data.email) { showToast('Vui lòng nhập họ tên và email', 'error'); return; }
+      const users = getUsers();
+      const idx = users.findIndex(x => x.id === data.id);
+      let next;
+      if (idx >= 0) {
+        next = users.slice();
+        next[idx] = data;
+        showToast('Đã cập nhật tài khoản');
+      } else {
+        next = [{...data}, ...users];
+        showToast('Đã thêm tài khoản mới');
+      }
+      setUsers(next);
+      closeModal();
+    }
+
+    function onExport() {
+      const data = JSON.stringify(getUsers(), null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'users.json'; a.click(); URL.revokeObjectURL(url);
+      showToast('Đã xuất dữ liệu JSON');
+    }
+    function onResetFilters() {
+      el.search.value = '';
+      el.roleFilter.value = '';
+      el.statusFilter.value = '';
+      el.sort.value = '';
+      render();
+    }
+
+    // Events
+    el.btnAdd.addEventListener('click', onAdd);
+    el.btnExport.addEventListener('click', onExport);
+    el.btnReset.addEventListener('click', onResetFilters);
+    el.btnCloseModal.addEventListener('click', closeModal);
+    el.btnSave.addEventListener('click', onSave);
+    el.btnResetForm.addEventListener('click', resetForm);
+    el.modalBackdrop.addEventListener('click', (e) => { if (e.target === el.modalBackdrop) closeModal(); });
+    el.search.addEventListener('input', render);
+    el.roleFilter.addEventListener('change', render);
+    el.statusFilter.addEventListener('change', render);
+    el.sort.addEventListener('change', render);
+
+    // Init
+    (function init(){ seedSampleUsers(); render(); })();
+
+    // expose
+    window.onEdit = onEdit;
+    window.onDelete = onDelete;
+  </script>
+</body>
+</html>
+
+
