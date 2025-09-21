@@ -1,200 +1,208 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <title>Quản lý Mini Mart</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Mini Mart</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f9f9f9;
+      }
 
-    .navbar {
-      display: flex;
-      background: #fff;
-      border-bottom: 1px solid #ddd;
-      padding: 10px 20px;
-      align-items: center;
-    }
-    .navbar a {
-      margin-right: 20px;
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-    }
-    .navbar a.active {
-      color: green;
-    }
-    .btn {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    .btn-blue {
-      background: #2196f3;
-      color: #fff;
-    }
-    .search-bar {
-      display: flex;
-      align-items: center;
-      margin: 20px;
-    }
-    .search-bar input {
-      padding: 8px;
-      width: 200px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    table {
-      width: 90%;
-      margin: 20px auto;
-      border-collapse: collapse;
-      background: #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
-      text-align: center;
-    }
-    th {
-      background: #f2f2f2;
-    }
-  </style>
-</head>
-<body>
-  <div class="navbar">
-    <a href="#" onclick="alert('Bạn đang ở mục Sản phẩm!')" class="active">Sản phẩm</a>
-  <a href="#" onclick="alert('Chưa được code!')">Kho hàng</a>
-  <a href="#" onclick="alert('Chưa được code!')">Đơn hàng</a>
-    <button class="btn btn-blue" onclick="addProduct()">Tạo sản phẩm</button>
-    <button class="btn btn-blue" onclick="exportFile()">Xuất file</button>
-  </div>
+      .navbar {
+        display: flex;
+        background: #fff;
+        border-bottom: 1px solid #ddd;
+        padding: 10px 20px;
+        align-items: center;
+      }
+      .navbar a {
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+      }
+      .navbar a.active {
+        color: green;
+      }
+      .btn {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+      .btn-blue {
+        background: #2196f3;
+        color: #fff;
+      }
+      .search-bar {
+        display: flex;
+        align-items: center;
+        margin: 20px;
+      }
+      .search-bar input {
+        padding: 8px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+      table {
+        width: 90%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      th,
+      td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: center;
+      }
+      th {
+        background: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <a href="#" onclick="alert('Bạn đang ở mục Sản phẩm!')" class="active"
+        >Sản phẩm</a
+      >
+      <a href="#" onclick="alert('Chưa được code!')">Kho hàng</a>
+      <a href="#" onclick="alert('Chưa được code!')">Đơn hàng</a>
+      <button class="btn btn-blue" onclick="addProduct()">Tạo sản phẩm</button>
+      <button class="btn btn-blue" onclick="exportFile()">Xuất file</button>
+    </div>
 
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Tìm kiếm..." onkeyup="searchProduct()">
-  </div>
+    <div class="search-bar">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Tìm kiếm..."
+        onkeyup="searchProduct()"
+      />
+    </div>
 
-  <table id="productTable">
-    <thead>
-      <tr>
-        <th>Mã SP</th>
-        <th>Tên SP</th>
-        <th>Đơn vị</th>
-        <th>Giá vốn (VND)</th>
-        <th>Giá bán (VND)</th>
-      </tr>
-    </thead>
-  <tbody>
-  <tr>
-    <td>G01</td>
-    <td>Gạo ST25</td>
-    <td>1 KG</td>
-    <td>22,000</td>
-    <td>28,000</td>
-  </tr>
-  <tr>
-    <td>M01</td>
-    <td>Mì Hảo Hảo</td>
-    <td>1 gói</td>
-    <td>4,000</td>
-    <td>4,500</td>
-  </tr>
-  <tr>
-    <td>M02</td>
-    <td>Mì Omachi</td>
-    <td>1 gói</td>
-    <td>5,000</td>
-    <td>6,000</td>
-  </tr>
-  <tr>
-    <td>V01</td>
-    <td>Rau muống</td>
-    <td>1 bó</td>
-    <td>6,000</td>
-    <td>10,000</td>
-  </tr>
-  <tr>
-    <td>V02</td>
-    <td>Rau cải</td>
-    <td>1 bó</td>
-    <td>5,000</td>
-    <td>9,000</td>
-  </tr>
-  <tr>
-    <td>V03</td>
-    <td>Rau lang</td>
-    <td>1 bó</td>
-    <td>7,000</td>
-    <td>12,000</td>
-  </tr>
-  <tr>
-    <td>G02</td>
-    <td>Gạo Bắc Hương</td>
-    <td>1 KG</td>
-    <td>18,000</td>
-    <td>24,000</td>
-  </tr>
-  <tr>
-    <td>N01</td>
-    <td>Nước suối AQUAFINA</td>
-    <td>1 chai</td>
-    <td>4,000</td>
-    <td>6,000</td>
-  </tr>
-  <tr>
-    <td>N02</td>
-    <td>Nước suối Lavie</td>
-    <td>1 chai</td>
-    <td>3,500</td>
-    <td>5,500</td>
-  </tr>
-  <tr>
-    <td>N03</td>
-    <td>Cocacola</td>
-    <td>1 chai</td>
-    <td>8,000</td>
-    <td>10,000</td>
-  </tr>
-  <tr>
-    <td>S01</td>
-    <td>Sữa Vinamilk</td>
-    <td>1 hộp</td>
-    <td>7,000</td>
-    <td>11,000</td>
-  </tr>
-  <tr>
-    <td>S02</td>
-    <td>TH True Milk</td>
-    <td>1 hộp</td>
-    <td>8,000</td>
-    <td>12,000</td>
-  </tr>
-</tbody>
+    <table id="productTable">
+      <thead>
+        <tr>
+          <th>Mã SP</th>
+          <th>Tên SP</th>
+          <th>Đơn vị</th>
+          <th>Giá vốn (VND)</th>
+          <th>Giá bán (VND)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>G01</td>
+          <td>Gạo ST25</td>
+          <td>1 KG</td>
+          <td>22,000</td>
+          <td>28,000</td>
+        </tr>
+        <tr>
+          <td>M01</td>
+          <td>Mì Hảo Hảo</td>
+          <td>1 gói</td>
+          <td>4,000</td>
+          <td>4,500</td>
+        </tr>
+        <tr>
+          <td>M02</td>
+          <td>Mì Omachi</td>
+          <td>1 gói</td>
+          <td>5,000</td>
+          <td>6,000</td>
+        </tr>
+        <tr>
+          <td>V01</td>
+          <td>Rau muống</td>
+          <td>1 bó</td>
+          <td>6,000</td>
+          <td>10,000</td>
+        </tr>
+        <tr>
+          <td>V02</td>
+          <td>Rau cải</td>
+          <td>1 bó</td>
+          <td>5,000</td>
+          <td>9,000</td>
+        </tr>
+        <tr>
+          <td>V03</td>
+          <td>Rau lang</td>
+          <td>1 bó</td>
+          <td>7,000</td>
+          <td>12,000</td>
+        </tr>
+        <tr>
+          <td>G02</td>
+          <td>Gạo Bắc Hương</td>
+          <td>1 KG</td>
+          <td>18,000</td>
+          <td>24,000</td>
+        </tr>
+        <tr>
+          <td>N01</td>
+          <td>Nước suối AQUAFINA</td>
+          <td>1 chai</td>
+          <td>4,000</td>
+          <td>6,000</td>
+        </tr>
+        <tr>
+          <td>N02</td>
+          <td>Nước suối Lavie</td>
+          <td>1 chai</td>
+          <td>3,500</td>
+          <td>5,500</td>
+        </tr>
+        <tr>
+          <td>N03</td>
+          <td>Cocacola</td>
+          <td>1 chai</td>
+          <td>8,000</td>
+          <td>10,000</td>
+        </tr>
+        <tr>
+          <td>S01</td>
+          <td>Sữa Vinamilk</td>
+          <td>1 hộp</td>
+          <td>7,000</td>
+          <td>11,000</td>
+        </tr>
+        <tr>
+          <td>S02</td>
+          <td>TH True Milk</td>
+          <td>1 hộp</td>
+          <td>8,000</td>
+          <td>12,000</td>
+        </tr>
+      </tbody>
+    </table>
 
-  </table>
+    <script>
+      function searchProduct() {
+        let input = document.getElementById("searchInput").value.toLowerCase();
+        let rows = document.querySelectorAll("#productTable tbody tr");
+        rows.forEach((row) => {
+          let text = row.innerText.toLowerCase();
+          row.style.display = text.includes(input) ? "" : "none";
+        });
+      }
 
-  <script>
-    function searchProduct() {
-      let input = document.getElementById("searchInput").value.toLowerCase();
-      let rows = document.querySelectorAll("#productTable tbody tr");
-      rows.forEach(row => {
-        let text = row.innerText.toLowerCase();
-        row.style.display = text.includes(input) ? "" : "none";
-      });
-    }
+      function addProduct() {
+        alert("Chức năng thêm sản phẩm sẽ code sau!");
+      }
 
-    function addProduct() {
-      alert("Chức năng thêm sản phẩm sẽ code sau!");
-    }
-
-    function exportFile() {
-      alert("Chức năng xuất file Excel/PDF sẽ code sau!");
-    }
-  </script>
-</body>
+      function exportFile() {
+        alert("Chức năng xuất file Excel/PDF sẽ code sau!");
+      }
+    </script>
+  </body>
 </html>
