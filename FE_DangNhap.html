@@ -1,155 +1,172 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Login</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Poppins", sans-serif;
-        font-size: 16px;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đăng nhập - Minimart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
 
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(135deg, #e0e0e0, #ffffff);
-        min-height: 100vh;
-        width: 100%;
-        overflow: hidden;
-        position: relative;
-        padding: 20px;
-        margin: 0;
-        background-color: #f0f0f0;
-      }
-      .Login {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #f0f0f0;
-        border-radius: 10px;
-        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        margin: 20px;
-        margin-top: 100px;
-        margin-bottom: 100px;
-        margin-left: 100px;
-        margin-right: 100px;
-      }
+    body {
+      background:#eff6ff; 
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
 
-      .Login-container {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        margin: 20px;
-      }
+    .login-box {
+      width:380px;
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      padding:32px;
+      box-shadow:0 8px 18px rgba(0,0,0,0.12);
+    }
 
-      .Login-container-left {
-        width: 50%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
+    h2 {
+      text-align:center;
+      margin-bottom:20px;
+      color:#2563eb;
+      font-size:22px;
+      font-weight:700;
+    }
 
-      .Login-container-right {
-        width: 50%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
+    .form-group {margin-bottom:16px}
 
-      .Login-container-right h2 {
-        font-size: 24px;
-        font-weight: 600;
-        margin-bottom: 20px;
-        color: #333;
-        text-align: center;
-        font-family: "Poppins", sans-serif;
-      }
+    label {
+      display:block;
+      margin-bottom:6px;
+      font-weight:600;
+      color:#374151;
+      font-size:14px;
+    }
 
-      .Login-container-right input {
-        width: 100%;
-        height: 40px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 0 10px;
-        margin-bottom: 10px;
-      }
+    input {
+      width:100%;
+      padding:10px 12px;
+      border:1px solid #d1d5db;
+      border-radius:8px;
+      font-size:14px;
+      outline:none;
+      transition:0.2s;
+    }
 
-      .Login-container-right button {
-        width: 100%;
-        height: 40px;
-        border: none;
-        border-radius: 5px;
-        background-color: #000;
-        color: #fff;
-      }
+    input:focus {
+      border-color:#2563eb;
+      box-shadow:0 0 0 2px #bfdbfe;
+    }
 
-      .Login-container-right button:hover {
-        background-color: #333;
-      }
+    .btn-login {
+      width:100%;
+      padding:10px;
+      border:none;
+      border-radius:8px;
+      background:#2563eb;
+      color:#fff;
+      font-size:15px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.2s;
+    }
 
-      .Login-container-right p {
-        font-size: 14px;
-        color: #333;
-      }
+    .btn-login:hover {
+      background:#1d4ed8;
+    }
 
-      .Login-container-right p a {
-        color: #000;
-      }
+    .links {
+      text-align:center;
+      margin-top:14px;
+      font-size:14px;
+    }
+    
+    .links a {
+      color:#2563eb;
+      text-decoration:none;
+      font-weight:500;
+    }
 
-      .Login-container-right p a:hover {
-        color: #333;
-      }
+    .links a:hover {
+      text-decoration:underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Đăng nhập</h2>
 
-      .Login-container-right p a:active {
-        color: #333;
-      }
-
-      .Login-container-right p a:visited {
-        color: #333;
-      }
-
-      .Login-container-right p a:focus {
-        color: #333;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="Login">
-      <div class="Login-container">
-        <div class="Login-container-left">
-          <h2>Chào mừng đã đến với website của chúng tôi</h2>
-          <p>Vui lòng nhập email và mật khẩu để đăng nhập</p>
-        </div>
-        <div class="Login-container-right">
-          <h2>Đăng nhập</h2>
-          <input type="text" placeholder="Email" />
-          <input type="password" placeholder="Mật khẩu" />
-          <button>Đăng nhập</button>
-          <p>
-            Bạn chưa có tài khoản? <a href="FrontEnd_DangKy.html">Đăng ký</a>
-          </p>
-        </div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="identifier">Tên đăng nhập / Email</label>
+        <input type="text" id="identifier" placeholder="Nhập username hoặc email..." required>
       </div>
+
+      <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <input type="password" id="password" placeholder="Nhập mật khẩu..." required>
+      </div>
+
+      <button type="submit" class="btn-login">Đăng nhập</button>
+    </form>
+
+    <div class="links">
+      <p><a href="#">Quên mật khẩu?</a></p>
+      <p>Chưa có tài khoản? <a href="FE_DangKy.html">Đăng ký</a></p>
     </div>
-  </body>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const id   = document.getElementById("identifier").value.trim();
+      const pass = document.getElementById("password").value;
+
+      let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+      let users    = JSON.parse(localStorage.getItem("users")) || [];
+
+      // ✅ Luôn reset admin về mặc định
+      accounts = accounts.filter(a => a.username !== "admin");
+      accounts.push({
+        username: "admin",
+        password: "123",
+        role: "Quản trị viên",
+        status: "Hoạt động"
+      });
+      localStorage.setItem("accounts", JSON.stringify(accounts));
+
+      // 1. Nếu id là username
+      let account = accounts.find(a => a.username === id);
+
+      // 2. Nếu id là email → tìm username từ users
+      if (!account) {
+        const user = users.find(u => u.email === id);
+        if (user) {
+          account = accounts.find(a => a.username === user.username);
+        }
+      }
+
+      if (!account) {
+        alert("❌ Không tìm thấy tài khoản!");
+        return;
+      }
+
+      // 3. Kiểm tra mật khẩu
+      if (account.password === pass) {
+        const role = (account.role && account.role.includes("Quản trị"))
+                      ? "admin" 
+                      : "user";
+
+        localStorage.setItem("role", role);
+        localStorage.setItem("loggedInUser", account.username);
+
+        alert("✅ Đăng nhập thành công!");
+        window.location.href = "FE_TrangChu.html";
+      } else {
+        alert("❌ Sai mật khẩu!");
+      }
+    });
+  </script>
+</body>
 </html>

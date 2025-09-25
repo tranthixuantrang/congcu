@@ -1,511 +1,315 @@
-roi b
-ngồi đâu á
-dãy cuối bên phải áo đen
-trc mặt nè
-lên đây ngồi
-composer create-project laravel/laravel ten_du_an_cua_ban
-https://github.com/MT207/cdio4_3.git
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Quản lý kho – Công ty ABC</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-    <style>
-        :root {
-            --brand-blue: #2d5bd1;
-            /* header */
-            --sidebar-bg: #ffffff;
-            --sidebar-border: #e9eef5;
-            --page-bg: #e9e9ee;
-            /* main gray */
-            --primary-500: #2953c7;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minimart — Quản lý kho</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        body {
-            background: var(--page-bg);
-        }
+  <style>
+    /* Bổ sung riêng cho trang Quản lý kho */
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
 
-        /* Header */
-        .app-header {
-            height: 64px;
-            background: var(--brand-blue);
-            color: #fff;
-        }
+    canvas {
+      max-height: 220px !important;
+    }
 
-        .app-header .logo {
-            font-weight: 600;
-            font-size: 18px;
-        }
+    .actions-inline {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
 
-        .app-header .icon-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            opacity: .9;
-        }
+    .actions-inline button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
 
-        .app-header .icon-btn:hover {
-            opacity: 1;
-            background: rgba(255, 255, 255, .12)
-        }
+    .actions-inline button.edit {
+      color:#2563eb;
+    }
 
-        /* Layout */
-        .app-wrap {
-            min-height: calc(100vh - 64px);
-        }
+    .actions-inline button.view {
+      color:#16a34a;
+    }
 
-        .sidebar {
-            width: 260px;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--sidebar-border);
-        }
-
-        .sidebar .user-card {
-            padding: 16px;
-            border-bottom: 1px solid var(--sidebar-border);
-        }
-
-        .avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .menu-title {
-            font-weight: 600;
-            color: #5b6b7b;
-            padding: 10px 16px;
-            text-transform: uppercase;
-            font-size: 13px;
-        }
-
-        .nav-section .btn-toggle {
-            width: 100%;
-            padding: 10px 16px;
-            background: none;
-            border: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-            color: #0f1f3d;
-        }
-
-        .nav-section .btn-toggle:hover {
-            background: #f5f7fb;
-        }
-
-        .nav-section .btn-toggle i {
-            color: var(--primary-500);
-        }
-
-        .nav-section .sub-list {
-            padding-left: 54px;
-        }
-
-        .nav-section .sub-link {
-            display: block;
-            padding: 6px 16px;
-            color: #3a4654;
-            font-size: 14px;
-            text-decoration: none;
-        }
-
-        .nav-section .sub-link:hover {
-            color: var(--primary-500);
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-        }
-
-        /* Card filters */
-        .filter-card {
-            background: #fff;
-            border-radius: 10px;
-            padding: 16px;
-            box-shadow: 0 1px 0 rgba(16, 24, 40, .04);
-        }
-
-        /* Table */
-        .table-card {
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #eef2f7;
-        }
-
-        .table thead th {
-            background: #f6f8fc;
-            color: #475569;
-            font-weight: 600;
-        }
-
-        .table td,
-        .table th {
-            vertical-align: middle;
-        }
-
-        .action-btn {
-            border: 1px solid #d6dbeb;
-            border-radius: 8px;
-            width: 32px;
-            height: 32px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 6px;
-        }
-
-        .action-btn.edit {
-            color: #2f3aec;
-        }
-
-        .action-btn.del {
-            color: #ff3b3b;
-        }
-
-        /* Add button */
-        .btn-add {
-            background: var(--primary-500);
-            color: #fff;
-            border-radius: 10px;
-        }
-
-        .btn-add i {
-            margin-right: 6px;
-        }
-
-        /* Small helpers */
-        .form-label {
-            font-weight: 600;
-            color: #334155;
-        }
-
-        .input-icon {
-            position: relative;
-        }
-
-        .input-icon .bi {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #64748b;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .sidebar {
-                position: fixed;
-                z-index: 1045;
-                top: 64px;
-                bottom: 0;
-                left: -270px;
-                transition: left .25s ease;
-            }
-
-            .sidebar.show {
-                left: 0;
-            }
-        }
-    </style>
+    .actions-inline button.delete {
+      color:#dc2626;
+    }
+  </style>
 </head>
-
 <body>
-    <!-- HEADER -->
-    <header class="app-header d-flex align-items-center px-3 px-lg-4">
-        <div class="d-flex align-items-center gap-3 flex-grow-1">
-            <button id="btnSidebar" class="btn btn-link text-white p-0 d-lg-none" aria-label="Toggle sidebar"><i
-                    class="bi bi-list" style="font-size: 1.5rem"></i></button>
-            <span class="logo d-flex align-items-center gap-2"><i class="bi bi-stars"></i> Công ty ABC</span>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="cube">▣</div>
+      <div>
+        <h1>Minimart</h1>
+        <p>Hệ thống quản lý</p>
+      </div>
+    </div>
+
+    <nav class="menu" id="sidebarMenu">
+      <!-- JS render -->
+    </nav>
+
+    <div class="logout">
+      <a class="item" href="FE_DangNhap.html">↪ Đăng xuất</a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="search">
+        <span>🔍</span>
+        <input type="text" placeholder="Tìm kiếm sản phẩm, mã SKU..." />
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-btn" aria-label="Thông báo">🔔</button>
+        <button class="icon-btn" aria-label="Cài đặt">⚙️</button>
+        <div class="user">
+          <div class="avatar" id="userAvatar">A</div>
+          <div class="meta">
+            <div class="name" id="userName">Admin</div>
+            <div class="role" id="userRole">Quản lý kho</div>
+          </div>
         </div>
-        <div class="d-flex align-items-center gap-2">
-            <a class="icon-btn" href="#" data-bs-toggle="tooltip" data-bs-title="Trợ giúp"><i
-                    class="bi bi-question-circle"></i></a>
-            <a class="icon-btn" href="#" data-bs-toggle="tooltip" data-bs-title="Hoàn tác"><i
-                    class="bi bi-arrow-counterclockwise"></i></a>
-            <a class="icon-btn" href="#" data-bs-toggle="tooltip" data-bs-title="Đăng xuất"><i
-                    class="bi bi-box-arrow-right"></i></a>
-        </div>
+      </div>
     </header>
 
-    <!-- APP BODY -->
-    <div class="app-wrap d-flex">
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="sidebar">
-            <div class="user-card d-flex align-items-center gap-3">
-                <img class="avatar"
-                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=300&auto=format&fit=crop"
-                    alt="avatar" />
-                <div class="small">
-                    <div class="fw-semibold">Trần Nguyễn Khánh V</div>
-                    <div class="text-muted">Quản trị viên</div>
-                </div>
-            </div>
+    <!-- Title -->
+    <section class="page-title">
+      <h2>Quản lý kho hàng</h2>
+      <p>Theo dõi và quản lý tồn kho hiệu quả</p>
+    </section>
 
-            <!-- Menu sections -->
-            <div class="menu-title">Tổng quan</div>
-            <div class="nav-section">
-                <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s1" aria-expanded="true">
-                    <i class="bi bi-journal-arrow-down"></i> Xuất – nhập với NCC
-                </button>
-                <div id="s1" class="collapse show">
-                    <a class="sub-link" href="#">Xuất kho</a>
-                    <a class="sub-link" href="#">Phiếu xuất kho</a>
-                </div>
-            </div>
-
-            <div class="nav-section">
-                <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s2">
-                    <i class="bi bi-box-arrow-in-down"></i> Nhập kho
-                </button>
-                <div id="s2" class="collapse">
-                    <a class="sub-link" href="#">Lệnh nhập kho</a>
-                    <a class="sub-link" href="#">Phiếu nhập kho</a>
-                </div>
-            </div>
-
-            <div class="nav-section">
-                <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s3">
-                    <i class="bi bi-arrow-left-right"></i> Xuất – nhập nội bộ
-                </button>
-                <div id="s3" class="collapse">
-                    <a class="sub-link" href="#">Lệnh xuất kho</a>
-                    <a class="sub-link" href="#">Phiếu xuất kho</a>
-                </div>
-            </div>
-
-            <div class="nav-section">
-                <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s4">
-                    <i class="bi bi-clipboard-data"></i> Báo cáo thống kê
-                </button>
-                <div id="s4" class="collapse">
-                    <a class="sub-link" href="#">Báo cáo nhập kho</a>
-                    <a class="sub-link" href="#">Báo cáo tồn kho</a>
-                    <a class="sub-link" href="#">Báo cáo xuất nhập tồn</a>
-                </div>
-            </div>
-
-            <div class="nav-section">
-                <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s5">
-                    <i class="bi bi-house-gear"></i> Quản lý kho hàng
-                </button>
-                <div id="s5" class="collapse">
-                    <a class="sub-link" href="#">Danh mục hàng</a>
-                    <a class="sub-link" href="#">Kho lưu trữ</a>
-                </div>
-            </div>
-
-            <div class="p-4 small text-muted">© 2025 ABC</div>
-        </aside>
-
-        <!-- MAIN CONTENT -->
-        <main class="content">
-            <!-- Filters -->
-            <div class="filter-card mb-3">
-                <form class="row g-3 align-items-end">
-                    <div class="col-12 col-md-3">
-                        <label class="form-label">Mã hàng hóa</label>
-                        <input type="text" class="form-control" placeholder="VD: DT001" />
-                    </div>
-                    <div class="col-12 col-md-3">
-                        <label class="form-label">Tên hàng hóa</label>
-                        <input type="text" class="form-control" placeholder="Nhập tên hàng" />
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <label class="form-label">Từ ngày</label>
-                        <div class="input-icon">
-                            <input type="date" class="form-control" />
-                            <i class="bi bi-calendar3"></i>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <label class="form-label">Đến ngày</label>
-                        <div class="input-icon">
-                            <input type="date" class="form-control" />
-                            <i class="bi bi-calendar3"></i>
-                        </div>
-                    </div>
-                    <div class="col-12 d-flex justify-content-between">
-                        <div></div>
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-outline-secondary"><i class="bi bi-search"></i> Tìm
-                                kiếm</button>
-                            <button type="button" class="btn btn-add" data-bs-toggle="modal"
-                                data-bs-target="#modalAdd"><i class="bi bi-plus-lg"></i> Thêm hàng hóa</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Table -->
-            <div class="table-card">
-                <div class="table-responsive">
-                    <table class="table table-bordered mb-0">
-                        <thead>
-                            <tr>
-                                <th style="width:60px">STT</th>
-                                <th>Tên hàng</th>
-                                <th style="width:120px">Mã hàng</th>
-                                <th style="width:140px">Nhóm hàng</th>
-                                <th style="width:110px">Đơn vị tính</th>
-                                <th style="width:150px">Đơn giá</th>
-                                <th style="width:120px">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Sample rows -->
-                            <tr>
-                                <td>1</td>
-                                <td>ĐT Samsung Galaxy</td>
-                                <td>XXXX</td>
-                                <td>Điện thoại</td>
-                                <td>Cái</td>
-                                <td>30.000.000</td>
-                                <td>
-                                    <a href="#" class="action-btn edit" data-bs-toggle="tooltip" data-bs-title="Sửa"><i
-                                            class="bi bi-pencil"></i></a>
-                                    <a href="#" class="action-btn del" data-bs-toggle="tooltip" data-bs-title="Xóa"><i
-                                            class="bi bi-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>ĐT Sam Sung S7</td>
-                                <td>XXXX</td>
-                                <td>Điện thoại</td>
-                                <td>Cái</td>
-                                <td>2.929.000</td>
-                                <td>
-                                    <a href="#" class="action-btn edit" data-bs-toggle="tooltip" data-bs-title="Sửa"><i
-                                            class="bi bi-pencil"></i></a>
-                                    <a href="#" class="action-btn del" data-bs-toggle="tooltip" data-bs-title="Xóa"><i
-                                            class="bi bi-trash"></i></a>
-                                </td>
-                            </tr>
-                            <!-- Repeat demo rows -->
-                            <tr>
-                                <td>3</td>
-                                <td>ĐT Redmi 9X</td>
-                                <td>XXXX</td>
-                                <td>Điện thoại</td>
-                                <td>Cái</td>
-                                <td>30.000.000</td>
-                                <td>
-                                    <a href="#" class="action-btn edit"><i class="bi bi-pencil"></i></a>
-                                    <a href="#" class="action-btn del"><i class="bi bi-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Tai nghe Bluetooth True</td>
-                                <td>XXXX</td>
-                                <td>Tai nghe</td>
-                                <td>Cái</td>
-                                <td>300.000</td>
-                                <td>
-                                    <a href="#" class="action-btn edit"><i class="bi bi-pencil"></i></a>
-                                    <a href="#" class="action-btn del"><i class="bi bi-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Cáp sạc Lightning không dây</td>
-                                <td>XXXX</td>
-                                <td>Cáp sạc – Củ sạc</td>
-                                <td>Cái</td>
-                                <td>300.000</td>
-                                <td>
-                                    <a href="#" class="action-btn edit"><i class="bi bi-pencil"></i></a>
-                                    <a href="#" class="action-btn del"><i class="bi bi-trash"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Pagination (demo) -->
-            <div class="mt-3 d-flex justify-content-end">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination pagination-sm mb-0">
-                        <li class="page-item disabled"><a class="page-link">«</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">»</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </main>
-    </div>
-
-    <!-- Add Modal -->
-    <div class="modal fade" id="modalAdd" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Thêm hàng hóa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Mã hàng</label>
-                            <input class="form-control" placeholder="VD: DT001" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Nhóm hàng</label>
-                            <select class="form-select">
-                                <option>Điện thoại</option>
-                                <option>Tai nghe</option>
-                                <option>Cáp sạc – Củ sạc</option>
-                            </select>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Tên hàng</label>
-                            <input class="form-control" placeholder="Nhập tên hàng" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">ĐVT</label>
-                            <input class="form-control" value="Cái" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Đơn giá</label>
-                            <input type="number" class="form-control" placeholder="0" />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary">Lưu</button>
-                </div>
-            </div>
+    <!-- KPI cards -->
+    <section class="kpis">
+      <article class="kpi">
+        <div class="kpi-head">
+          <span class="kpi-title">Tổng số mặt hàng</span>
+          <div class="kpi-ic">🧰</div>
         </div>
-    </div>
+        <div class="kpi-num">1,247</div>
+        <div class="kpi-sub pos">+12% <span>so với tháng trước</span></div>
+      </article>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Sidebar for mobile
-        const btnSidebar = document.getElementById('btnSidebar');
-        const sidebar = document.getElementById('sidebar');
-        btnSidebar?.addEventListener('click', () => { sidebar.classList.toggle('show'); });
+      <article class="kpi">
+        <div class="kpi-head">
+          <span class="kpi-title">Tổng số lượng</span>
+          <div class="kpi-ic">📈</div>
+        </div>
+        <div class="kpi-num">8,965</div>
+        <div class="kpi-sub pos">+8% <span>so với tháng trước</span></div>
+      </article>
 
-        // Enable tooltips
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) { return new bootstrap.Tooltip(tooltipTriggerEl); });
-    </script>
+      <article class="kpi">
+        <div class="kpi-head">
+          <span class="kpi-title">Giá trị tồn kho</span>
+          <div class="kpi-ic">💲</div>
+        </div>
+        <div class="kpi-num">đ2.4M</div>
+        <div class="kpi-sub pos">+15% <span>so với tháng trước</span></div>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi-head">
+          <span class="kpi-title">Sắp hết hạn</span>
+          <div class="kpi-ic">⚠️</div>
+        </div>
+        <div class="kpi-num">23</div>
+        <div class="kpi-sub neg">-5% <span>so với tháng trước</span></div>
+      </article>
+    </section>
+
+    <!-- Charts -->
+    <section class="chart-row">
+      <article class="card">
+        <div class="card-head">
+          <h3>Biểu đồ nhập/xuất</h3>
+          <p>Theo dõi số lượng sản phẩm</p>
+        </div>
+        <canvas id="barChart"></canvas>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h3>Phân bố danh mục</h3>
+          <p>Tỷ lệ % sản phẩm trong kho</p>
+        </div>
+        <canvas id="donutChart"></canvas>
+      </article>
+    </section>
+
+    <!-- Inventory table -->
+    <section class="card">
+      <div class="card-head between">
+        <div>
+          <h3>Danh sách tồn kho</h3>
+          <p>Quản lý và theo dõi tất cả sản phẩm</p>
+        </div>
+        <div class="actions">
+          <button class="btn primary">＋ Thêm sản phẩm</button>
+          <button class="btn ghost">⤓ Xuất Excel</button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-sm">
+          <span>🔎</span>
+          <input type="text" placeholder="Tìm kiếm sản phẩm..." />
+        </div>
+        <button class="filter">
+          <span>⛃</span>
+          Tất cả trạng thái
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Mã SP</th>
+              <th>Tên sản phẩm</th>
+              <th>Danh mục</th>
+              <th class="num">Số lượng</th>
+              <th class="num">Đơn giá</th>
+              <th>Trạng thái</th>
+              <th>Nhà cung cấp</th>
+              <th>Hạn sử dụng</th>
+              <th class="center">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="#" class="link">SP001</a></td>
+              <td>Bánh mì sandwich</td>
+              <td>Thực phẩm</td>
+              <td class="num">45 cái</td>
+              <td class="num">25.000 đ</td>
+              <td><span class="badge success">Còn hàng</span></td>
+              <td>Công ty ABC</td>
+              <td class="exp red">2024-01-15</td>
+              <td>
+                <div class="actions-inline">
+                  <button class="view">👁️</button>
+                  <button class="edit">✏️</button>
+                  <button class="delete">🗑️</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td><a href="#" class="link">SP002</a></td>
+              <td>Nước uống Coca Cola</td>
+              <td>Đồ uống</td>
+              <td class="num">120 chai</td>
+              <td class="num">15.000 đ</td>
+              <td><span class="badge success">Còn hàng</span></td>
+              <td>Coca Cola VN</td>
+              <td class="exp red">2024-06-30</td>
+              <td>
+                <div class="actions-inline">
+                  <button class="view">👁️</button>
+                  <button class="edit">✏️</button>
+                  <button class="delete">🗑️</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td><a href="#" class="link">SP003</a></td>
+              <td>Bàn chải đánh răng</td>
+              <td>Y tế</td>
+              <td class="num">8 cái</td>
+              <td class="num">35.000 đ</td>
+              <td><span class="badge warn">Sắp hết</span></td>
+              <td>P&amp;G Vietnam</td>
+              <td class="exp">2025-12-31</td>
+              <td>
+                <div class="actions-inline">
+                  <button class="view">👁️</button>
+                  <button class="edit">✏️</button>
+                  <button class="delete">🗑️</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- JS Biểu đồ + Sidebar + User -->
+  <script>
+    // Lấy role + user từ localStorage
+    const role = localStorage.getItem("role") || "guest";
+    const loggedInUser = localStorage.getItem("loggedInUser") || "Khách";
+
+    const sidebarMenu = document.getElementById("sidebarMenu");
+    const userName = document.getElementById("userName");
+    const userRole = document.getElementById("userRole");
+    const userAvatar = document.getElementById("userAvatar");
+
+    if (role === "admin") {
+      sidebarMenu.innerHTML = `
+        <a href="FE_TrangChu.html">🏠 Trang chủ</a>
+        <a href="FE_QuanLySanPham.html">📦 Quản lý sản phẩm</a>
+        <a class="active" href="FE_QuanLyKho.html">🏬 Quản lý kho</a>
+        <a href="FE_QuanLyTaiKhoan.html">👥 Quản lý tài khoản</a>
+        <a href="FE_QuanLyNguoiDung.html">🧑‍💻 Quản lý người dùng</a>
+        <a href="#">🧾 Hóa đơn</a>
+        <a href="#">⚙️ Cài đặt</a>
+      `;
+      userName.textContent = loggedInUser;
+      userRole.textContent = "Quản trị viên";
+      userAvatar.textContent = loggedInUser.charAt(0).toUpperCase();
+    } else {
+      sidebarMenu.innerHTML = `
+        <a href="FE_TrangChu.html">🏠 Trang chủ</a>
+        <a href="#">🛒 Sản phẩm</a>
+        <a href="#">📞 Thông tin liên hệ</a>
+        <a href="#">🏬 Danh sách cửa hàng</a>
+      `;
+      userName.textContent = loggedInUser;
+      userRole.textContent = "Người mua";
+      userAvatar.textContent = loggedInUser.charAt(0).toUpperCase();
+    }
+
+    // Charts
+    const ctxBar = document.getElementById('barChart').getContext('2d');
+    new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: ['T1','T2','T3','T4','T5','T6'],
+        datasets: [
+          { label: 'Nhập kho', data: [120,150,200,180,250,300], backgroundColor: '#3b82f6' },
+          { label: 'Xuất kho', data: [100,130,160,170,220,260], backgroundColor: '#14b8a6' }
+        ]
+      },
+      options: { plugins:{legend:{position:'top'}}, scales:{y:{beginAtZero:true}} }
+    });
+
+    const ctxDonut = document.getElementById('donutChart').getContext('2d');
+    new Chart(ctxDonut, {
+      type: 'doughnut',
+      data: {
+        labels: ['Thực phẩm','Đồ gia dụng','Y tế','Thời trang'],
+        datasets: [{ data: [45,25,20,10], backgroundColor: ['#3b82f6','#14b8a6','#f59e0b','#ef4444'] }]
+      },
+      options: { plugins:{legend:{position:'bottom'}} }
+    });
+  </script>
 </body>
-
 </html>

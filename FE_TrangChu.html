@@ -2,131 +2,371 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Trang chủ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minimart - Trang chủ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
+    :root {
+      --sidebar-bg:#0b1220;
+      --sidebar-text:#e5e7eb;
+      --primary:#2563eb;
+      --primary-dark:#1d4ed8;
+      --border:#e5e7eb;
+      --bg:#f3f4f6;
+      --text:#111827;
+      --muted:#6b7280;
+    }
+
+    * {
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Inter,sans-serif;
+    }
+
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
+      display:grid;
+      grid-template-columns:240px 1fr;
+      min-height:100vh;
+      background:var(--bg);
+      color:var(--text);
     }
-    /* Header */
-    .header {
-      background: #f0f0f0;
-      padding: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .header-left {
-      font-weight: bold;
-      color: gray;
-    }
-    .header-right button {
-      margin-left: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-    /* Thanh tìm kiếm */
-    .search-bar {
-      background: #6ce66c;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .search-bar input {
-      width: 400px;
-      padding: 8px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-    }
-    .search-bar button {
-      padding: 8px 15px;
-      border: none;
-      border-radius: 20px;
-      background: white;
-      cursor: pointer;
-    }
-    /* Layout chính */
-    .container {
-      display: flex;
-    }
-    /* Menu trái */
+
+    /* Sidebar */
     .sidebar {
-      width: 200px;
-      background: #fff;
-      border-right: 1px solid #ddd;
+      background:var(--sidebar-bg);
+      color:var(--sidebar-text);
+      padding:20px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
     }
-    .sidebar button {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-bottom: 1px solid #ddd;
-      text-align: left;
-      cursor: pointer;
-      background: #f9f9f9;
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:20px;
     }
-    .sidebar button:hover {
-      background: #e6e6e6;
+
+    .brand .cube {
+      width:40px;
+      height:40px;
+      display:grid;
+      place-items:center;
+      background:#2563eb22;
+      border:1px solid #1f2a44;
+      color:#60a5fa;
+      border-radius:12px;
+      font-size:20px;
     }
-    /* Khu vực sản phẩm */
+
+    .brand h1 {
+      font-size:18px;
+      font-weight:700;
+      color:#fff;
+    }
+
+    .brand p {
+      font-size:12px;
+      color:#9ca3af;
+      margin-top:2px;
+    }
+
+    nav.menu {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    nav.menu a {
+      padding:10px 12px;
+      border-radius:10px;
+      color:#cbd5e1;
+      text-decoration:none;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:14px;
+    }
+
+    nav.menu a:hover,
+    nav.menu a.active {
+      background:#1d2a4a;
+      color:#fff;
+    }
+
+    .logout {
+      margin-top:auto;
+    }
+
+    .logout a {
+      color:#f87171;
+      font-weight:600;
+      text-decoration:none;
+    }
+
+    /* Main */
+    .main {
+      padding:0 24px 24px;
+      overflow-x:hidden;
+    }
+
+    .topbar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:16px 0;
+    }
+
+    .search {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:8px 14px;
+      width:min(500px,100%);
+    }
+
+    .search input {
+      border:none;
+      outline:none;
+      width:100%;
+    }
+
+    .top-actions {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .icon-btn {
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:10px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+
+    .user {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:#fff;
+      border:1px solid var(--border);
+      padding:6px 10px;
+      border-radius:12px;
+    }
+
+    .avatar {
+      width:32px;
+      height:32px;
+      border-radius:999px;
+      background:var(--primary);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-weight:700;
+    }
+
+    /* Banner */
+    .banner {
+      width:100%;
+      height:200px;
+      background:url("https://picsum.photos/1200/300?random=12") center/cover;
+      border-radius:12px;
+      margin:12px 0;
+    }
+
+    /* Danh mục */
+    .categories {
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+      background:var(--primary);
+      color:#fff;
+      padding:10px 20px;
+      border-radius:8px;
+      font-weight:600;
+    }
+
+    .categories a {
+      color:#fff;
+      text-decoration:none;
+    }
+
+    .categories a:hover {
+      text-decoration:underline;
+    }
+
+    /* Products */
     .products {
-      flex: 1;
-      background: #55e055;
-      padding: 20px;
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
+      margin-top:20px;
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+      gap:20px;
     }
-    .product {
-      width: 100px;
-      text-align: center;
+
+    .product-card {
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      transition:0.2s;
     }
-    .product img {
-      width: 100%;
-      border-radius: 10px;
+
+    .product-card:hover {
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .product-card img {
+      width:100%;
+      height:150px;
+      object-fit:cover;
+      border-radius:8px;
+    }
+
+    .product-card h4 {
+      margin:10px 0 6px;
+      font-size:15px;
+    }
+
+    .product-price {
+      font-weight:700;
+      color:#dc2626;
+    }
+
+    .product-btn {
+      margin-top:auto;
+      padding:8px;
+      border:none;
+      border-radius:8px;
+      background:var(--primary);
+      color:#fff;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .product-btn:hover {
+      background:var(--primary-dark);
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <div class="header">
-    <div class="header-left">Trang chủ</div>
-    <div class="header-right">
-      <button>Đăng nhập</button>
-      <button>Cài đặt</button>
-      <button>Trợ giúp</button>
-      🛒
-    </div>
-  </div>
-
-  <!-- Thanh tìm kiếm -->
-  <div class="search-bar">
-    <input type="text" placeholder="Tìm kiếm sản phẩm...">
-    <button>🔍</button>
-  </div>
-
-  <!-- Nội dung chính -->
-  <div class="container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <button>Thịt cá</button>
-      <button>Rau củ</button>
-      <button>Bia nước giải khát</button>
-      <button>Sữa các loại</button>
-      <button>Bánh kẹo</button>
-      <button>Thực phẩm đông mát</button>
-      <button>Kem sữa chua</button>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="cube">▣</div>
+      <div>
+        <h1>Minimart</h1>
+        <p>Hệ thống quản lý</p>
+      </div>
     </div>
 
-    <!-- Sản phẩm -->
-    <div class="products">
-      <div class="product"><img src="https://via.placeholder.com/100x80?text=Sale"></div>
-      <div class="product"><img src="https://via.placeholder.com/100x80?text=Thịt"></div>
-      <div class="product"><img src="https://via.placeholder.com/100x80?text=Rau"></div>
-      <div class="product"><img src="https://via.placeholder.com/100x80?text=Sữa"></div>
-      <div class="product"><img src="https://via.placeholder.com/100x80?text=Bánh"></div>
-      <div class="product"><img src="https://via.placeholder.com/100x80?text=Nước"></div>
+    <nav class="menu" id="sidebarMenu">
+      <!-- JS render -->
+    </nav>
+
+    <div class="logout">
+      <a href="FE_DangNhap.html">↪ Đăng xuất</a>
     </div>
-  </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="topbar">
+      <div class="search">
+        <span>🔍</span>
+        <input type="text" placeholder="Tìm sản phẩm...">
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn">🛒</button>
+        <div class="user">
+          <div class="avatar" id="userAvatar">K</div>
+          <div class="meta">
+            <div class="name" id="userName">Khách</div>
+            <div class="role" id="userRole">Người mua</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Banner -->
+    <div class="banner"></div>
+
+    <!-- Categories -->
+    <nav class="categories">
+      <a href="#">Thực phẩm</a>
+      <a href="#">Đồ uống</a>
+      <a href="#">Gia dụng</a>
+      <a href="#">Thời trang</a>
+      <a href="#">Chăm sóc cá nhân</a>
+    </nav>
+
+    <!-- Products -->
+    <section class="products">
+      <div class="product-card">
+        <img src="https://tse1.mm.bing.net/th/id/OIP.2I_nrPw1ej5eiuF8HRPx6AHaHa?pid=Api&P=0&h=180" alt="Bánh mì">
+        <h4>Bánh mì sandwich</h4>
+        <div class="product-price">25.000 đ</div>
+        <button class="product-btn">Mua ngay</button>
+      </div>
+
+      <div class="product-card">
+        <img src="https://tse4.mm.bing.net/th/id/OIP.YfZ6ADkfXhwl9P_vlKZ2XAHaEK?pid=Api&P=0&h=180" alt="Coca Cola">
+        <h4>Nước uống Coca Cola</h4>
+        <div class="product-price">15.000 đ</div>
+        <button class="product-btn">Mua ngay</button>
+      </div>
+
+      <div class="product-card">
+        <img src="https://tse4.mm.bing.net/th/id/OIP.sHzAncAJq2msNK-dvl1_IwHaFM?pid=Api&P=0&h=180" alt="Dầu gội">
+        <h4>Dầu gội đầu</h4>
+        <div class="product-price">85.000 đ</div>
+        <button class="product-btn">Mua ngay</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Lấy role + user từ localStorage
+    const role = localStorage.getItem("role") || "guest";
+    const loggedInUser = localStorage.getItem("loggedInUser") || "Khách";
+
+    const sidebarMenu = document.getElementById("sidebarMenu");
+    const userName = document.getElementById("userName");
+    const userRole = document.getElementById("userRole");
+    const userAvatar = document.getElementById("userAvatar");
+
+    if (role === "admin") {
+      sidebarMenu.innerHTML = `
+        <a class="active" href="FE_TrangChu.html">🏠 Trang chủ</a>
+        <a href="FE_QuanLySanPham.html">📦 Quản lý sản phẩm</a>
+        <a href="FE_QuanLyKho.html">🏬 Quản lý kho</a>
+        <a href="FE_QuanLyTaiKhoan.html">👥 Quản lý tài khoản</a>
+        <a href="FE_QuanLyNguoiDung.html">🧑‍💻 Quản lý người dùng</a>
+        <a href="#">🧾 Hóa đơn</a>
+        <a href="#">⚙️ Cài đặt</a>
+      `;
+      userName.textContent = loggedInUser;
+      userRole.textContent = "Quản trị viên";
+      userAvatar.textContent = loggedInUser.charAt(0).toUpperCase();
+    } else {
+      sidebarMenu.innerHTML = `
+        <a class="active" href="FE_TrangChu.html">🏠 Trang chủ</a>
+        <a href="#">🛒 Sản phẩm</a>
+        <a href="#">📞 Thông tin liên hệ</a>
+        <a href="#">🏬 Danh sách cửa hàng</a>
+      `;
+      userName.textContent = loggedInUser;
+      userRole.textContent = "Người mua";
+      userAvatar.textContent = loggedInUser.charAt(0).toUpperCase();
+    }
+  </script>
 </body>
 </html>
