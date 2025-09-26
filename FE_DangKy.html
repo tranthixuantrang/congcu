@@ -1,179 +1,188 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Đăng ký - Minimart</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Inter, sans-serif;
-    }
-
-    body {
-      background: #eff6ff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .register-box {
-      width: 420px;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 28px;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-    }
-
-    h2 {
-      text-align: center;
-      color: #2563eb;
-      margin-bottom: 16px;
-    }
-
-    .form-group {
-      margin-bottom: 12px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      color: #374151;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      outline: none;
-    }
-
-    input:focus, textarea:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 2px #bfdbfe;
-    }
-
-    textarea {
-      min-height: 60px;
-      resize: vertical;
-    }
-
-    .btn-register {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #2563eb;
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .links {
-      text-align: center;
-      margin-top: 12px;
-    }
-
-    .links a {
-      color: #2563eb;
-      text-decoration: none;
-    }
-  </style>
-</head>
-<body>
-  <div class="register-box">
-    <h2>Đăng ký tài khoản</h2>
-
-    <form id="registerForm">
-      <div class="form-group">
-        <label>Họ và tên</label>
-        <input id="fullname" required>
-      </div>
-
-      <div class="form-group">
-        <label>Email</label>
-        <input id="email" type="email" required>
-      </div>
-
-      <div class="form-group">
-        <label>Số điện thoại</label>
-        <input id="phone" required>
-      </div>
-
-      <div class="form-group">
-        <label>Địa chỉ</label>
-        <textarea id="address" required></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Tên đăng nhập</label>
-        <input id="username" required>
-      </div>
-
-      <div class="form-group">
-        <label>Mật khẩu</label>
-        <input id="password" type="password" required>
-      </div>
-
-      <button class="btn-register" type="submit">Đăng ký</button>
-    </form>
-
-    <div class="links">
-      Đã có tài khoản? <a href="FE_DangNhap.html">Đăng nhập</a>
-    </div>
-  </div>
-
-  <script>
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const fullname = document.getElementById('fullname').value.trim();
-      const email    = document.getElementById('email').value.trim();
-      const phone    = document.getElementById('phone').value.trim();
-      const address  = document.getElementById('address').value.trim();
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value;
-
-      let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
-      let users    = JSON.parse(localStorage.getItem('users')) || [];
-
-      // Kiểm tra trùng
-      if (accounts.find(a => a.username === username) ||
-          users.find(u => u.email === email) ||
-          users.find(u => u.phone === phone)) {
-        alert('⚠️ Tài khoản / email / số điện thoại đã tồn tại');
-        return;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Đăng ký - Minimart</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Inter, sans-serif;
       }
 
-      // Lưu vào accounts
-      accounts.push({
-        username,
-        password,
-        role: 'Khách hàng',
-        status: 'Hoạt động'
-      });
-      localStorage.setItem('accounts', JSON.stringify(accounts));
+      body {
+        background: #eff6ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-      // Lưu vào users
-      users.push({
-        fullname,
-        email,
-        phone,
-        address,
-        username
-      });
-      localStorage.setItem('users', JSON.stringify(users));
+      .register-box {
+        width: 420px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 28px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+      }
 
-      alert('✅ Đăng ký thành công — mời bạn đăng nhập!');
-      window.location.href = 'FE_DangNhap.html';
-    });
-  </script>
-</body>
+      h2 {
+        text-align: center;
+        color: #2563eb;
+        margin-bottom: 16px;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #374151;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        outline: none;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 2px #bfdbfe;
+      }
+
+      textarea {
+        min-height: 60px;
+        resize: vertical;
+      }
+
+      .btn-register {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        background: #2563eb;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .links {
+        text-align: center;
+        margin-top: 12px;
+      }
+
+      .links a {
+        color: #2563eb;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="register-box">
+      <h2>Đăng ký tài khoản</h2>
+
+      <form id="registerForm">
+        <div class="form-group">
+          <label>Họ và tên</label>
+          <input id="fullname" required />
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input id="email" type="email" required />
+        </div>
+
+        <div class="form-group">
+          <label>Số điện thoại</label>
+          <input id="phone" required />
+        </div>
+
+        <div class="form-group">
+          <label>Địa chỉ</label>
+          <textarea id="address" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Tên đăng nhập</label>
+          <input id="username" required />
+        </div>
+
+        <div class="form-group">
+          <label>Mật khẩu</label>
+          <input id="password" type="password" required />
+        </div>
+
+        <button class="btn-register" type="submit">Đăng ký</button>
+      </form>
+
+      <div class="links">
+        Đã có tài khoản? <a href="FE_DangNhap.html">Đăng nhập</a>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const fullname = document.getElementById("fullname").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const phone = document.getElementById("phone").value.trim();
+          const address = document.getElementById("address").value.trim();
+          const username = document.getElementById("username").value.trim();
+          const password = document.getElementById("password").value;
+
+          let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+          let users = JSON.parse(localStorage.getItem("users")) || [];
+
+          // Kiểm tra trùng
+          if (
+            accounts.find((a) => a.username === username) ||
+            users.find((u) => u.email === email) ||
+            users.find((u) => u.phone === phone)
+          ) {
+            alert("Tài khoản / email / số điện thoại đã tồn tại");
+            return;
+          }
+
+          // Lưu vào accounts
+          accounts.push({
+            username,
+            password,
+            role: "Khách hàng",
+            status: "Hoạt động",
+          });
+          localStorage.setItem("accounts", JSON.stringify(accounts));
+
+          // Lưu vào users
+          users.push({
+            fullname,
+            email,
+            phone,
+            address,
+            username,
+          });
+          localStorage.setItem("users", JSON.stringify(users));
+
+          alert("Đăng ký thành công — mời bạn đăng nhập!");
+          window.location.href = "FE_DangNhap.html";
+        });
+    </script>
+  </body>
 </html>

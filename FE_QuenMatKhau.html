@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quên mật khẩu - Minimart</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .forgot-password-container {
+        max-width: 400px;
+        margin: 40px auto;
+        padding: 30px 25px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to bottom right, #f0f4f8, #ffffff);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+      }
+
+      .forgot-password-container:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      }
+
+      .forgot-password-container h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #0078d4;
+        font-size: 24px;
+      }
+
+      .forgot-password-container label {
+        display: block;
+        margin-top: 15px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .forgot-password-container input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 15px;
+        transition: border-color 0.3s ease;
+      }
+
+      .forgot-password-container input:focus {
+        border-color: #0078d4;
+        outline: none;
+        background-color: #fefefe;
+      }
+
+      .forgot-password-container button {
+        margin-top: 25px;
+        width: 100%;
+        padding: 12px;
+        background-color: #0078d4;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .forgot-password-container button:hover {
+        background-color: #005fa3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="forgot-password-container">
+      <h2>Quên mật khẩu</h2>
+      <form id="forgotForm">
+        <label for="forgotEmail">Email đã đăng ký:</label>
+        <input
+          type="email"
+          id="forgotEmail"
+          placeholder="Nhập email của bạn"
+          required
+        />
+
+        <label for="newPassword">Mật khẩu mới:</label>
+        <input
+          type="password"
+          id="newPassword"
+          placeholder="Nhập mật khẩu mới"
+          required
+        />
+
+        <button type="submit">Đặt lại mật khẩu</button>
+      </form>
+    </div>
+    <script>
+      document
+        .getElementById("forgotForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const email = document.getElementById("forgotEmail").value.trim();
+          const newPass = document.getElementById("newPassword").value;
+
+          let users = JSON.parse(localStorage.getItem("users")) || [];
+          let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+
+          const user = users.find((u) => u.email === email);
+
+          if (!user) {
+            alert(" Không tìm thấy email trong hệ thống!");
+            return;
+          }
+
+          const account = accounts.find((a) => a.username === user.username);
+
+          if (!account) {
+            alert("Không tìm thấy tài khoản liên kết với email này!");
+            return;
+          }
+
+          account.password = newPass;
+          localStorage.setItem("accounts", JSON.stringify(accounts));
+          alert("Mật khẩu đã được cập nhật thành công!");
+          window.location.href = "FE_DangNhap.html";
+        });
+    </script>
+  </body>
+</html>
