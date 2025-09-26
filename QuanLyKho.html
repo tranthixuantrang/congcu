@@ -1,466 +1,611 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quản lý kho – Công ty ABC</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-  <style>
-    :root {
-      --brand-blue: #2d5bd1; /* header */
-      --sidebar-bg: #ffffff;
-      --sidebar-border: #e9eef5;
-      --page-bg: #e9e9ee; /* main gray */
-      --primary-500: #2953c7;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quản lý kho – Công ty ABC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        :root {
+            --brand-blue: #2d5bd1;
+            /* header */
+            --sidebar-bg: #ffffff;
+            --sidebar-border: #e9eef5;
+            --page-bg: #e9e9ee;
+            /* main gray */
+            --primary-500: #2953c7;
+        }
 
-    body { background: var(--page-bg); }
+        body {
+            background: var(--page-bg);
+        }
 
-    /* Header */
-    .app-header {
-      height: 64px;
-      background: var(--brand-blue);
-      color: #fff;
-    }
-    .app-header .logo {
-      font-weight: 600; font-size: 18px;
-    }
-    .app-header .icon-btn {
-      width: 40px; height: 40px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color:#fff; opacity:.9;
-    }
-    .app-header .icon-btn:hover{opacity:1; background: rgba(255,255,255,.12)}
+        /* Header */
+        .app-header {
+            height: 64px;
+            background: var(--brand-blue);
+            color: #fff;
+        }
 
-    /* Layout */
-    .app-wrap { min-height: calc(100vh - 64px); }
-    .sidebar { width: 260px; background: var(--sidebar-bg); border-right: 1px solid var(--sidebar-border); }
+        .app-header .logo {
+            font-weight: 600;
+            font-size: 18px;
+        }
 
-    .sidebar .user-card { padding: 16px; border-bottom: 1px solid var(--sidebar-border); }
-    .avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+        .app-header .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            opacity: .9;
+        }
 
-    .menu-title { font-weight: 600; color: #5b6b7b; padding: 10px 16px; text-transform: uppercase; font-size: 13px; }
-    .nav-section .btn-toggle { width: 100%; padding: 10px 16px; background: none; border: 0; display: flex; align-items: center; gap: 10px; font-weight: 500; color: #0f1f3d; }
-    .nav-section .btn-toggle:hover { background: #f5f7fb; }
-    .nav-section .btn-toggle i { color: var(--primary-500); }
-    .nav-section .sub-list { padding-left: 54px; }
-    .nav-section .sub-link { display: block; padding: 6px 16px; color: #3a4654; font-size: 14px; text-decoration: none; }
-    .nav-section .sub-link:hover { color: var(--primary-500); }
+        .app-header .icon-btn:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, .12)
+        }
 
-    .content { flex: 1; padding: 20px; }
+        /* Layout */
+        .app-wrap {
+            min-height: calc(100vh - 64px);
+        }
 
-    /* Card filters */
-    .filter-card { background: #fff; border-radius: 10px; padding: 16px; box-shadow: 0 1px 0 rgba(16,24,40,.04); }
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--sidebar-border);
+        }
 
-    /* Table */
-    .table-card { background:#fff; border-radius: 10px; overflow: hidden; border: 1px solid #eef2f7; }
-    .table thead th { background: #f6f8fc; color: #475569; font-weight: 600; }
-    .table td, .table th { vertical-align: middle; }
+        .sidebar .user-card {
+            padding: 16px;
+            border-bottom: 1px solid var(--sidebar-border);
+        }
 
-    .action-btn { border: 1px solid #d6dbeb; border-radius: 8px; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; margin-right: 6px; }
-    .action-btn.edit { color: #2f3aec; }
-    .action-btn.del { color: #ff3b3b; }
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-    /* Add button */
-    .btn-add { background: var(--primary-500); color: #fff; border-radius: 10px; }
-    .btn-add i { margin-right: 6px; }
+        .menu-title {
+            font-weight: 600;
+            color: #5b6b7b;
+            padding: 10px 16px;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
 
-    /* Small helpers */
-    .form-label { font-weight: 600; color: #334155; }
-    .input-icon { position: relative; }
-    .input-icon .bi { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #64748b; }
+        .nav-section .btn-toggle {
+            width: 100%;
+            padding: 10px 16px;
+            background: none;
+            border: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: #0f1f3d;
+        }
 
-    /* Responsive */
-    @media (max-width: 992px) {
-      .sidebar { position: fixed; z-index: 1045; top: 64px; bottom: 0; left: -270px; transition: left .25s ease; }
-      .sidebar.show { left: 0; }
-    }
-  </style>
+        .nav-section .btn-toggle:hover {
+            background: #f5f7fb;
+        }
+
+        .nav-section .btn-toggle i {
+            color: var(--primary-500);
+        }
+
+        .nav-section .sub-list {
+            padding-left: 54px;
+        }
+
+        .nav-section .sub-link {
+            display: block;
+            padding: 6px 16px;
+            color: #3a4654;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .nav-section .sub-link:hover {
+            color: var(--primary-500);
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Card filters */
+        .filter-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 1px 0 rgba(16, 24, 40, .04);
+        }
+
+        /* Table */
+        .table-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #eef2f7;
+        }
+
+        .table thead th {
+            background: #f6f8fc;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .table td,
+        .table th {
+            vertical-align: middle;
+        }
+
+        .action-btn {
+            border: 1px solid #d6dbeb;
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 6px;
+        }
+
+        .action-btn.edit {
+            color: #2f3aec;
+        }
+
+        .action-btn.del {
+            color: #ff3b3b;
+        }
+
+        /* Add button */
+        .btn-add {
+            background: var(--primary-500);
+            color: #fff;
+            border-radius: 10px;
+        }
+
+        .btn-add i {
+            margin-right: 6px;
+        }
+
+        /* Small helpers */
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon .bi {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                z-index: 1045;
+                top: 64px;
+                bottom: 0;
+                left: -270px;
+                transition: left .25s ease;
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <!-- HEADER -->
-  <header class="app-header d-flex align-items-center px-3 px-lg-4">
-    <div class="d-flex align-items-center gap-3 flex-grow-1">
-      <button id="btnSidebar" class="btn btn-link text-white p-0 d-lg-none" aria-label="Toggle sidebar"><i class="bi bi-list" style="font-size: 1.5rem"></i></button>
-      <span class="logo d-flex align-items-center gap-2"><i class="bi bi-stars"></i> Công ty ABC</span>
+    <!-- HEADER -->
+    <header class="app-header d-flex align-items-center px-3 px-lg-4">
+        <div class="d-flex align-items-center gap-3 flex-grow-1">
+            <button id="btnSidebar" class="btn btn-link text-white p-0 d-lg-none" aria-label="Toggle sidebar"><i
+                    class="bi bi-list" style="font-size: 1.5rem"></i></button>
+            <span class="logo d-flex align-items-center gap-2"><i class="bi bi-stars"></i> Công ty ABC</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <a class="icon-btn" href="#" data-bs-toggle="tooltip" data-bs-title="Trợ giúp"><i
+                    class="bi bi-question-circle"></i></a>
+            <a class="icon-btn" href="#" data-bs-toggle="tooltip" data-bs-title="Hoàn tác"><i
+                    class="bi bi-arrow-counterclockwise"></i></a>
+            <a class="icon-btn" href="#" data-bs-toggle="tooltip" data-bs-title="Đăng xuất"><i
+                    class="bi bi-box-arrow-right"></i></a>
+        </div>
+    </header>
+
+    <!-- APP BODY -->
+    <div class="app-wrap d-flex">
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="sidebar">
+            <div class="user-card d-flex align-items-center gap-3">
+                <img class="avatar"
+                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=300&auto=format&fit=crop"
+                    alt="avatar" />
+                <div class="small">
+                    <div class="fw-semibold">Trần Nguyễn Khánh V</div>
+                    <div class="text-muted">Quản trị viên</div>
+                </div>
+            </div>
+
+            <!-- Menu sections -->
+            <div class="menu-title">Tổng quan</div>
+            <div class="nav-section">
+                <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s1" aria-expanded="true">
+                    <i class="bi bi-journal-arrow-down"></i> Xuất – nhập với NCC
+                </button>
+                <div id="s1" class="collapse show">
+                    <a class="sub-link" href="#">Xuất kho</a>
+                    <a class="sub-link" href="#">Phiếu xuất kho</a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s2">
+                    <i class="bi bi-box-arrow-in-down"></i> Nhập kho
+                </button>
+                <div id="s2" class="collapse">
+                    <a class="sub-link" href="#">Lệnh nhập kho</a>
+                    <a class="sub-link" href="#">Phiếu nhập kho</a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s3">
+                    <i class="bi bi-arrow-left-right"></i> Xuất – nhập nội bộ
+                </button>
+                <div id="s3" class="collapse">
+                    <a class="sub-link" href="#">Lệnh xuất kho</a>
+                    <a class="sub-link" href="#">Phiếu xuất kho</a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s4">
+                    <i class="bi bi-clipboard-data"></i> Báo cáo thống kê
+                </button>
+                <div id="s4" class="collapse">
+                    <a class="sub-link" href="#">Báo cáo nhập kho</a>
+                    <a class="sub-link" href="#">Báo cáo tồn kho</a>
+                    <a class="sub-link" href="#">Báo cáo xuất nhập tồn</a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s5">
+                    <i class="bi bi-house-gear"></i> Quản lý kho hàng
+                </button>
+                <div id="s5" class="collapse">
+                    <a class="sub-link" href="#">Danh mục hàng</a>
+                    <a class="sub-link" href="#">Kho lưu trữ</a>
+                </div>
+            </div>
+
+            <div class="p-4 small text-muted">© 2025 ABC</div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="content">
+            <!-- Filters -->
+            <div class="filter-card mb-3">
+                <form class="row g-3 align-items-end">
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Mã hàng hóa</label>
+                        <input type="text" class="form-control" placeholder="VD: DT001" />
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tên hàng hóa</label>
+                        <input type="text" class="form-control" placeholder="Nhập tên hàng" />
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Từ ngày</label>
+                        <div class="input-icon">
+                            <input type="date" class="form-control" />
+                            <i class="bi bi-calendar3"></i>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Đến ngày</label>
+                        <div class="input-icon">
+                            <input type="date" class="form-control" />
+                            <i class="bi bi-calendar3"></i>
+                        </div>
+                    </div>
+                    <div class="col-12 d-flex justify-content-between">
+                        <div></div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-outline-secondary"><i class="bi bi-search"></i> Tìm
+                                kiếm</button>
+                            <button type="button" class="btn btn-add" data-bs-toggle="modal"
+                                data-bs-target="#modalAdd"><i class="bi bi-plus-lg"></i> Thêm hàng hóa</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Table -->
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table class="table table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th style="width:60px">STT</th>
+                                <th>Tên hàng</th>
+                                <th style="width:120px">Mã hàng</th>
+                                <th style="width:140px">Nhóm hàng</th>
+                                <th style="width:110px">Đơn vị tính</th>
+                                <th style="width:150px">Đơn giá</th>
+                                <th style="width:120px">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Sample rows -->
+                            <tr>
+                                <td>1</td>
+                                <td>ĐT Samsung Galaxy</td>
+                                <td>XXXX</td>
+                                <td>Điện thoại</td>
+                                <td>Cái</td>
+                                <td>30.000.000</td>
+                                <td>
+                                    <a href="#" class="action-btn edit" data-bs-toggle="tooltip" data-bs-title="Sửa"><i
+                                            class="bi bi-pencil"></i></a>
+                                    <a href="#" class="action-btn del" data-bs-toggle="tooltip" data-bs-title="Xóa"><i
+                                            class="bi bi-trash"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>ĐT Sam Sung S7</td>
+                                <td>XXXX</td>
+                                <td>Điện thoại</td>
+                                <td>Cái</td>
+                                <td>2.929.000</td>
+                                <td>
+                                    <a href="#" class="action-btn edit" data-bs-toggle="tooltip" data-bs-title="Sửa"><i
+                                            class="bi bi-pencil"></i></a>
+                                    <a href="#" class="action-btn del" data-bs-toggle="tooltip" data-bs-title="Xóa"><i
+                                            class="bi bi-trash"></i></a>
+                                </td>
+                            </tr>
+                            <!-- Repeat demo rows -->
+                            <tr>
+                                <td>3</td>
+                                <td>ĐT Redmi 9X</td>
+                                <td>XXXX</td>
+                                <td>Điện thoại</td>
+                                <td>Cái</td>
+                                <td>30.000.000</td>
+                                <td>
+                                    <a href="#" class="action-btn edit"><i class="bi bi-pencil"></i></a>
+                                    <a href="#" class="action-btn del"><i class="bi bi-trash"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Tai nghe Bluetooth True</td>
+                                <td>XXXX</td>
+                                <td>Tai nghe</td>
+                                <td>Cái</td>
+                                <td>300.000</td>
+                                <td>
+                                    <a href="#" class="action-btn edit"><i class="bi bi-pencil"></i></a>
+                                    <a href="#" class="action-btn del"><i class="bi bi-trash"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Cáp sạc Lightning không dây</td>
+                                <td>XXXX</td>
+                                <td>Cáp sạc – Củ sạc</td>
+                                <td>Cái</td>
+                                <td>300.000</td>
+                                <td>
+                                    <a href="#" class="action-btn edit"><i class="bi bi-pencil"></i></a>
+                                    <a href="#" class="action-btn del"><i class="bi bi-trash"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination (demo) -->
+            <div class="mt-3 d-flex justify-content-end">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled"><a class="page-link">«</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">»</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </main>
     </div>
-    <div class="d-flex align-items-center gap-2">
-      <a class="icon-btn" href="#" data-bs-toggle="tooltip" data-bs-title="Trợ giúp"><i class="bi bi-question-circle"></i></a>
-      <a class="icon-btn" href="#" data-bs-toggle="tooltip" data-bs-title="Hoàn tác"><i class="bi bi-arrow-counterclockwise"></i></a>
-      <a class="icon-btn" href="#" data-bs-toggle="tooltip" data-bs-title="Đăng xuất"><i class="bi bi-box-arrow-right"></i></a>
+
+    <!-- Add Modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="modalAdd" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm hàng hóa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Mã hàng</label>
+                            <input id="inpMa" class="form-control" placeholder="VD: DT001" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nhóm hàng</label>
+                            <select id="inpNhom" class="form-select">
+                                <option>Điện thoại</option>
+                                <option>Tai nghe</option>
+                                <option>Cáp sạc – Củ sạc</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Tên hàng</label>
+                            <input id="inpTen" class="form-control" placeholder="Nhập tên hàng" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">ĐVT</label>
+                            <input id="inpDvt" class="form-control" value="Cái" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Đơn giá</label>
+                            <input id="inpGia" type="number" class="form-control" placeholder="0" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary">Lưu</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </header>
 
-  <!-- APP BODY -->
-  <div class="app-wrap d-flex">
-    <!-- SIDEBAR -->
-    <aside id="sidebar" class="sidebar">
-      <div class="user-card d-flex align-items-center gap-3">
-        <img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=300&auto=format&fit=crop" alt="avatar" />
-        <div class="small">
-          <div class="fw-semibold">Trần Nguyễn Khánh V</div>
-          <div class="text-muted">Quản trị viên</div>
-        </div>
-      </div>
 
-      <!-- Menu sections -->
-      <div class="menu-title">Tổng quan</div>
-      <div class="nav-section">
-        <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s1" aria-expanded="true">
-          <i class="bi bi-journal-arrow-down"></i> Xuất – nhập với NCC
-        </button>
-        <div id="s1" class="collapse show">
-          <a class="sub-link" href="#">Xuất kho</a>
-          <a class="sub-link" href="#">Phiếu xuất kho</a>
-        </div>
-      </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const tableBody = document.querySelector("table tbody");
+        const modalAdd = document.getElementById("modalAdd");
+        const btnSave = modalAdd.querySelector(".btn-primary");
 
-      <div class="nav-section">
-        <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s2">
-          <i class="bi bi-box-arrow-in-down"></i> Nhập kho
-        </button>
-        <div id="s2" class="collapse">
-          <a class="sub-link" href="#">Lệnh nhập kho</a>
-          <a class="sub-link" href="#">Phiếu nhập kho</a>
-        </div>
-      </div>
+        const inputMa = document.getElementById("inpMa");
+        const inputNhom = document.getElementById("inpNhom");
+        const inputTen = document.getElementById("inpTen");
+        const inputDvt = document.getElementById("inpDvt");
+        const inputGia = document.getElementById("inpGia");
 
-      <div class="nav-section">
-        <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s3">
-          <i class="bi bi-arrow-left-right"></i> Xuất – nhập nội bộ
-        </button>
-        <div id="s3" class="collapse">
-          <a class="sub-link" href="#">Lệnh xuất kho</a>
-          <a class="sub-link" href="#">Phiếu xuất kho</a>
-        </div>
-      </div>
+        let editRow = null;
 
-      <div class="nav-section">
-        <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s4">
-          <i class="bi bi-clipboard-data"></i> Báo cáo thống kê
-        </button>
-        <div id="s4" class="collapse">
-          <a class="sub-link" href="#">Báo cáo nhập kho</a>
-          <a class="sub-link" href="#">Báo cáo tồn kho</a>
-          <a class="sub-link" href="#">Báo cáo xuất nhập tồn</a>
-        </div>
-      </div>
+        function updateSTT() {
+            Array.from(tableBody.rows).forEach((row, idx) => {
+                row.cells[0].textContent = idx + 1;
+            });
+        }
 
-      <div class="nav-section">
-        <button class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#s5">
-          <i class="bi bi-house-gear"></i> Quản lý kho hàng
-        </button>
-        <div id="s5" class="collapse">
-          <a class="sub-link" href="#">Danh mục hàng</a>
-          <a class="sub-link" href="#">Kho lưu trữ</a>
-        </div>
-      </div>
+        btnSave.addEventListener("click", () => {
+            const ma = inputMa.value.trim();
+            const nhom = inputNhom.value.trim();
+            const ten = inputTen.value.trim();
+            const dvt = inputDvt.value.trim();
+            const gia = inputGia.value.trim();
 
-      <div class="p-4 small text-muted">© 2025 ABC</div>
-    </aside>
+            if (!ma || !ten) {
+                alert("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
 
-    <!-- MAIN CONTENT -->
-    <main class="content">
-      <!-- Filters -->
-      <div class="filter-card mb-3">
-        <form class="row g-3 align-items-end">
-          <div class="col-12 col-md-3">
-            <label class="form-label">Mã hàng hóa</label>
-            <input type="text" class="form-control" placeholder="VD: DT001" />
-          </div>
-          <div class="col-12 col-md-3">
-            <label class="form-label">Tên hàng hóa</label>
-            <input type="text" class="form-control" placeholder="Nhập tên hàng" />
-          </div>
-          <div class="col-6 col-md-3">
-            <label class="form-label">Từ ngày</label>
-            <div class="input-icon">
-              <input type="date" class="form-control" />
-              <i class="bi bi-calendar3"></i>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <label class="form-label">Đến ngày</label>
-            <div class="input-icon">
-              <input type="date" class="form-control" />
-              <i class="bi bi-calendar3"></i>
-            </div>
-          </div>
-          <div class="col-12 d-flex justify-content-between">
-            <div></div>
-            <div class="d-flex gap-2">
-              <button type="button" class="btn btn-outline-secondary"><i class="bi bi-search"></i> Tìm kiếm</button>
-              <button type="button" class="btn btn-add" data-bs-toggle="modal" data-bs-target="#modalAdd"><i class="bi bi-plus-lg"></i> Thêm hàng hóa</button>
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <!-- Table -->
-      <div class="table-card">
-        <div class="table-responsive">
-          <table class="table table-bordered mb-0">
-            <thead>
-              <tr>
-                <th style="width:60px">STT</th>
-                <th>Tên hàng</th>
-                <th style="width:120px">Mã hàng</th>
-                <th style="width:140px">Nhóm hàng</th>
-                <th style="width:110px">Đơn vị tính</th>
-                <th style="width:150px">Đơn giá</th>
-                <th style="width:120px">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Sample rows -->
-              <tr>
-                <td>1</td>
-                <td>ĐT Samsung Galaxy</td>
-                <td>XXXX</td>
-                <td>Điện thoại</td>
-                <td>Cái</td>
-                <td>30.000.000</td>
+            if (editRow) {
+                // sửa
+                editRow.cells[1].textContent = ten;
+                editRow.cells[2].textContent = ma;
+                editRow.cells[3].textContent = nhom;
+                editRow.cells[4].textContent = dvt;
+                editRow.cells[5].textContent = gia;
+                editRow = null;
+            } else {
+                // thêm mới
+                const newRow = tableBody.insertRow();
+                newRow.innerHTML = `
+                <td></td>
+                <td>${ten}</td>
+                <td>${ma}</td>
+                <td>${nhom}</td>
+                <td>${dvt}</td>
+                <td>${gia}</td>
                 <td>
-                  <a href="#" class="action-btn edit" data-bs-toggle="tooltip" data-bs-title="Sửa"><i class="bi bi-pencil"></i></a>
-                  <a href="#" class="action-btn del" data-bs-toggle="tooltip" data-bs-title="Xóa"><i class="bi bi-trash"></i></a>
+                    <a href="#" class="action-btn edit"><i class="bi bi-pencil"></i></a>
+                    <a href="#" class="action-btn del"><i class="bi bi-trash"></i></a>
                 </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>ĐT Sam Sung S7</td>
-                <td>XXXX</td>
-                <td>Điện thoại</td>
-                <td>Cái</td>
-                <td>2.929.000</td>
-                <td>
-                  <a href="#" class="action-btn edit" data-bs-toggle="tooltip" data-bs-title="Sửa"><i class="bi bi-pencil"></i></a>
-                  <a href="#" class="action-btn del" data-bs-toggle="tooltip" data-bs-title="Xóa"><i class="bi bi-trash"></i></a>
-                </td>
-              </tr>
-              <!-- Repeat demo rows -->
-              <tr>
-                <td>3</td>
-                <td>ĐT Redmi 9X</td>
-                <td>XXXX</td>
-                <td>Điện thoại</td>
-                <td>Cái</td>
-                <td>30.000.000</td>
-                <td>
-                  <a href="#" class="action-btn edit"><i class="bi bi-pencil"></i></a>
-                  <a href="#" class="action-btn del"><i class="bi bi-trash"></i></a>
-                </td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Tai nghe Bluetooth True</td>
-                <td>XXXX</td>
-                <td>Tai nghe</td>
-                <td>Cái</td>
-                <td>300.000</td>
-                <td>
-                  <a href="#" class="action-btn edit"><i class="bi bi-pencil"></i></a>
-                  <a href="#" class="action-btn del"><i class="bi bi-trash"></i></a>
-                </td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>Cáp sạc Lightning không dây</td>
-                <td>XXXX</td>
-                <td>Cáp sạc – Củ sạc</td>
-                <td>Cái</td>
-                <td>300.000</td>
-                <td>
-                  <a href="#" class="action-btn edit"><i class="bi bi-pencil"></i></a>
-                  <a href="#" class="action-btn del"><i class="bi bi-trash"></i></a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Pagination (demo) -->
-      <div class="mt-3 d-flex justify-content-end">
-        <nav aria-label="Page navigation">
-          <ul class="pagination pagination-sm mb-0">
-            <li class="page-item disabled"><a class="page-link">«</a></li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">»</a></li>
-          </ul>
-        </nav>
-      </div>
-    </main>
-  </div>
-
-  <!-- Add Modal -->
-  <div class="modal fade" id="modalAdd" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Thêm hàng hóa</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Mã hàng</label>
-              <input class="form-control" placeholder="VD: DT001" />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Nhóm hàng</label>
-              <select class="form-select">
-                <option>Điện thoại</option>
-                <option>Tai nghe</option>
-                <option>Cáp sạc – Củ sạc</option>
-              </select>
-            </div>
-            <div class="col-12">
-              <label class="form-label">Tên hàng</label>
-              <input class="form-control" placeholder="Nhập tên hàng" />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">ĐVT</label>
-              <input class="form-control" value="Cái" />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Đơn giá</label>
-              <input type="number" class="form-control" placeholder="0" />
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
-          <button type="button" class="btn btn-primary">Lưu</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Sidebar for mobile
-  const btnSidebar = document.getElementById('btnSidebar');
-  const sidebar = document.getElementById('sidebar');
-  btnSidebar?.addEventListener('click', () => { sidebar.classList.toggle('show'); });
-
-  // Enable tooltips
-  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  tooltipTriggerList.map(function (tooltipTriggerEl) { return new bootstrap.Tooltip(tooltipTriggerEl); });
+                `;
 
 
-  const tableBody = document.querySelector("table tbody");
-  const modalAdd = document.getElementById("modalAdd");
-  const btnSave = modalAdd.querySelector(".btn-primary");
-  const inputMa = modalAdd.querySelectorAll(".form-control, .form-select")[0];
-  const inputNhom = modalAdd.querySelectorAll(".form-control, .form-select")[1];
-  const inputTen = modalAdd.querySelectorAll(".form-control, .form-select")[2];
-  const inputDvt = modalAdd.querySelectorAll(".form-control, .form-select")[3];
-  const inputGia = modalAdd.querySelectorAll(".form-control, .form-select")[4];
+            }
 
-  let editRow = null;
+            // reset form
+            inputMa.value = "";
+            inputNhom.value = "Điện thoại";
+            inputTen.value = "";
+            inputDvt.value = "Cái";
+            inputGia.value = "";
 
-  // Cập nhật 
-  function updateSTT() {
-    Array.from(tableBody.rows).forEach((row, idx) => {
-      row.cells[0].textContent = idx + 1;
-    });
-  }
+            bootstrap.Modal.getOrCreateInstance(modalAdd).hide();
+            enableActions();
+            updateSTT();
+        });
 
-  // Lưu 
-  btnSave.addEventListener("click", () => {
-    const ma = inputMa.value.trim();
-    const nhom = inputNhom.value.trim();
-    const ten = inputTen.value.trim();
-    const dvt = inputDvt.value.trim();
-    const gia = inputGia.value.trim();
+        function enableActions() {
+            tableBody.querySelectorAll(".action-btn.del").forEach(btn => {
+                btn.onclick = e => {
+                    e.preventDefault();
+                    btn.closest("tr").remove();
+                    updateSTT();
+                };
+            });
 
-    if (!ma || !ten) {
-      alert("Vui lòng nhập đầy đủ thông tin!");
-      return;
-    }
+            tableBody.querySelectorAll(".action-btn.edit").forEach(btn => {
+                btn.onclick = e => {
+                    e.preventDefault();
+                    editRow = btn.closest("tr");
+                    const cells = editRow.cells;
+                    inputTen.value = cells[1].textContent;
+                    inputMa.value = cells[2].textContent;
+                    inputNhom.value = cells[3].textContent;
+                    inputDvt.value = cells[4].textContent;
+                    inputGia.value = cells[5].textContent;
+                    bootstrap.Modal.getOrCreateInstance(modalAdd).show();
+                };
+            });
+        }
 
-    if (editRow) {
-      // sửa sản phẩm
-      editRow.cells[1].textContent = ten;
-      editRow.cells[2].textContent = ma;
-      editRow.cells[3].textContent = nhom;
-      editRow.cells[4].textContent = dvt;
-      editRow.cells[5].textContent = gia;
-      editRow = null;
-    } else {
-      // thêm mới sản phẩm
-      const newRow = tableBody.insertRow();
-      newRow.innerHTML = `
-        <td></td>
-        <td>${ten}</td>
-        <td>${ma}</td>
-        <td>${nhom}</td>
-        <td>${dvt}</td>
-        <td>${gia}</td>
-        <td>
-          <a href="#" class="action-btn edit" data-bs-toggle="tooltip" data-bs-title="Sửa"><i class="bi bi-pencil"></i></a>
-          <a href="#" class="action-btn del" data-bs-toggle="tooltip" data-bs-title="Xóa"><i class="bi bi-trash"></i></a>
-        </td>
-      `;
-    }
-
-    // reset form
-    inputMa.value = "";
-    inputNhom.value = "Điện thoại";
-    inputTen.value = "";
-    inputDvt.value = "Cái";
-    inputGia.value = "";
-
-    bootstrap.Modal.getInstance(modalAdd).hide();
-    enableActions();
-    updateSTT();
-  });
-
-  // Kích hoạt nút Sửa / Xóa
-  function enableActions() {
-    tableBody.querySelectorAll(".action-btn.del").forEach(btn => {
-      btn.onclick = e => {
-        e.preventDefault();
-        btn.closest("tr").remove();
+        enableActions();
         updateSTT();
-      };
-    });
 
-    tableBody.querySelectorAll(".action-btn.edit").forEach(btn => {
-      btn.onclick = e => {
-        e.preventDefault();
-        editRow = btn.closest("tr");
-        const cells = editRow.cells;
-        inputTen.value = cells[1].textContent;
-        inputMa.value = cells[2].textContent;
-        inputNhom.value = cells[3].textContent;
-        inputDvt.value = cells[4].textContent;
-        inputGia.value = cells[5].textContent;
-        new bootstrap.Modal(modalAdd).show();
-      };
-    });
-  }
-  enableActions();
-  updateSTT();
+        // filter
+        const filterMa = document.querySelector(".filter-card input[placeholder='VD: DT001']");
+        const filterTen = document.querySelector(".filter-card input[placeholder='Nhập tên hàng']");
+        function filterTable() {
+            const maVal = filterMa.value.toLowerCase();
+            const tenVal = filterTen.value.toLowerCase();
+            Array.from(tableBody.rows).forEach(row => {
+                const ma = row.cells[2].textContent.toLowerCase();
+                const ten = row.cells[1].textContent.toLowerCase();
+                row.style.display = (ma.includes(maVal) && ten.includes(tenVal)) ? "" : "none";
+            });
+        }
+        filterMa.addEventListener("input", filterTable);
+        filterTen.addEventListener("input", filterTable);
+    </script>
 
-  // Lọc sản phẩm theo ô input filter
-  const filterMa = document.querySelector(".filter-card input[placeholder='VD: DT001']");
-  const filterTen = document.querySelector(".filter-card input[placeholder='Nhập tên hàng']");
-  function filterTable() {
-    const maVal = filterMa.value.toLowerCase();
-    const tenVal = filterTen.value.toLowerCase();
-    Array.from(tableBody.rows).forEach(row => {
-      const ma = row.cells[2].textContent.toLowerCase();
-      const ten = row.cells[1].textContent.toLowerCase();
-      row.style.display = (ma.includes(maVal) && ten.includes(tenVal)) ? "" : "none";
-    });
-  }
-  filterMa.addEventListener("input", filterTable);
-  filterTen.addEventListener("input", filterTable);
-</script>
 
-  
+
 </body>
+
 </html>
