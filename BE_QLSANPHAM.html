@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý Mini Mart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+
+    .navbar {
+      display: flex;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 20px;
+      align-items: center;
+    }
+    .navbar a {
+      margin-right: 20px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    .navbar a.active {
+      color: green;
+    }
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .btn-blue {
+      background: #2196f3;
+      color: #fff;
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      margin: 20px;
+    }
+    .search-bar input {
+      padding: 8px;
+      width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background: #f2f2f2;
+    }
+    .custom-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #007bff;
+    }
+
+    /* Form thêm sản phẩm */
+    #addForm {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    #addForm input {
+      display: block;
+      margin: 10px 0;
+      padding: 8px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    #addForm button {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="#" onclick="alert('Bạn đang ở mục Sản phẩm!')" class="active">Sản phẩm</a>
+    <a href="#" onclick="alert('Chưa được code!')">Kho hàng</a>
+    <a href="#" onclick="alert('Chưa được code!')">Đơn hàng</a>
+    <button class="btn btn-blue" onclick="showAddForm()">Tạo sản phẩm</button>
+    <button class="btn btn-blue" onclick="exportFile()">Xuất file</button>
+    <button onclick="deleteSelected()">Xóa sản phẩm đã chọn</button>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Tìm kiếm..." onkeyup="searchProduct()">
+  </div>
+
+  <table border="1" id="productTable">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Mã SP</th>
+        <th>Tên SP</th>
+        <th>Đơn vị</th>
+        <th>Giá vốn (VND)</th>
+        <th>Giá bán (VND)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
+        <td>G01</td>
+        <td>Gạo ST25</td>
+        <td>1 KG</td>
+        <td>22000</td>
+        <td>28000</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
+        <td>M01</td>
+        <td>Mì Hảo Hảo</td>
+        <td>1 gói</td>
+        <td>4000</td>
+        <td>4500</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
+        <td>V01</td>
+        <td>Rau muống</td>
+        <td>1 bó</td>
+        <td>6000</td>
+        <td>10000</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
+        <td>N01</td>
+        <td>Nước suối Aquafina</td>
+        <td>1 chai</td>
+        <td>4000</td>
+        <td>6000</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
+        <td>S01</td>
+        <td>Sữa Vinamilk</td>
+        <td>1 hộp</td>
+        <td>7000</td>
+        <td>11000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Form nhập sản phẩm -->
+  <div id="addForm">
+    <h3>Thêm sản phẩm</h3>
+    <input type="text" id="idInput" placeholder="Mã SP">
+    <input type="text" id="nameInput" placeholder="Tên SP">
+    <input type="text" id="unitInput" placeholder="Đơn vị">
+    <input type="number" id="costInput" placeholder="Giá vốn">
+    <input type="number" id="priceInput" placeholder="Giá bán">
+    <button onclick="addProduct()">Lưu</button>
+    <button onclick="closeForm()">Hủy</button>
+  </div>
+
+  <script>
+    function searchProduct() {
+      let input = document.getElementById("searchInput").value.toLowerCase();
+      let rows = document.querySelectorAll("#productTable tbody tr");
+      rows.forEach(row => {
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(input) ? "" : "none";
+      });
+    }
+
+    function showAddForm() {
+      document.getElementById("addForm").style.display = "block";
+    }
+
+    function closeForm() {
+      document.getElementById("addForm").style.display = "none";
+    }
+
+    function addProduct() {
+      const id = document.getElementById("idInput").value;
+      const name = document.getElementById("nameInput").value;
+      const unit = document.getElementById("unitInput").value;
+      const cost = document.getElementById("costInput").value;
+      const price = document.getElementById("priceInput").value;
+
+      if (!id || !name) {
+        alert("Vui lòng nhập đầy đủ thông tin!");
+        return;
+      }
+
+      const table = document.getElementById("productTable").querySelector("tbody");
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
+        <td>${id}</td>
+        <td>${name}</td>
+        <td>${unit}</td>
+        <td>${cost}</td>
+        <td>${price}</td>
+      `;
+
+      table.appendChild(row);
+
+      // reset input sau khi thêm
+      document.getElementById("idInput").value = "";
+      document.getElementById("nameInput").value = "";
+      document.getElementById("unitInput").value = "";
+      document.getElementById("costInput").value = "";
+      document.getElementById("priceInput").value = "";
+
+      closeForm();
+    }
+
+    function exportFile() {
+      alert("Chức năng xuất file Excel/PDF sẽ code sau!");
+    }
+
+    function deleteSelected() {
+      const checkboxes = document.querySelectorAll(".delete-checkbox:checked");
+      checkboxes.forEach(cb => cb.closest("tr").remove());
+    }
+  </script>
+</body>
+</html>
