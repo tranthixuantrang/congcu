@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý bán hàng - Siêu thị mini</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Quản lý bán hàng - Siêu thị mini</h1>
+  </header>
+
+  <main>
+    <section id="products-section" class="card">
+      <h2>Sản phẩm</h2>
+      <div class="grid" style="margin-bottom:8px">
+        <input type="text" id="product-search" placeholder="Tìm kiếm sản phẩm (tên/mã)">
+        <div></div><div></div><div></div>
+      </div>
+      <form id="product-form" class="grid">
+        <input type="text" id="product-name" placeholder="Tên sản phẩm" required>
+        <input type="number" id="product-price" placeholder="Đơn giá (VND)" min="0" step="100" required>
+        <input type="number" id="product-stock" placeholder="Tồn kho" min="0" step="1" required>
+        <button type="submit">Thêm/Cập nhật</button>
+      </form>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Tên</th>
+              <th>Giá</th>
+              <th>Tồn</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody id="product-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="customers-section" class="card">
+      <h2>Khách hàng</h2>
+      <form id="customer-form" class="grid">
+        <input type="text" id="customer-name" placeholder="Tên khách" required>
+        <input type="text" id="customer-phone" placeholder="Số điện thoại" required>
+        <button type="submit">Thêm/Cập nhật</button>
+      </form>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Tên</th>
+              <th>Điện thoại</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody id="customer-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="sales-section" class="card">
+      <h2>Bán hàng</h2>
+      <div class="grid">
+        <select id="sale-customer"></select>
+        <select id="sale-product"></select>
+        <input type="number" id="sale-qty" placeholder="Số lượng" min="1" value="1">
+        <button id="add-to-cart">Thêm vào giỏ</button>
+      </div>
+
+      <div class="grid" style="margin-top:8px">
+        <input type="number" id="discount-rate" placeholder="Chiết khấu %" min="0" max="100" value="0">
+        <input type="number" id="vat-rate" placeholder="VAT %" min="0" max="20" value="0">
+        <div></div><div></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Sản phẩm</th>
+              <th>Giá</th>
+              <th>SL</th>
+              <th>Thành tiền</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="cart-table"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" class="right">Tạm tính</td>
+              <td id="cart-subtotal">0</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="right">Chiết khấu</td>
+              <td id="cart-discount">0</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="right">VAT</td>
+              <td id="cart-vat">0</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="right">Tổng thanh toán</td>
+              <td id="cart-total">0</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="actions">
+        <button id="checkout">Thanh toán</button>
+        <button id="clear-cart" class="secondary">Xóa giỏ</button>
+      </div>
+    </section>
+
+    <section id="invoices-section" class="card">
+      <h2>Hóa đơn & Thống kê</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã HĐ</th>
+              <th>Ngày</th>
+              <th>Khách</th>
+              <th>Tổng tiền</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="invoice-table"></tbody>
+        </table>
+      </div>
+      <div class="stats">
+        <div>Doanh thu hôm nay: <strong id="revenue-today">0</strong></div>
+        <div>Doanh thu tháng này: <strong id="revenue-month">0</strong></div>
+        <button id="export-csv" class="secondary">Xuất CSV</button>
+        <button id="export-json" class="secondary">Sao lưu (JSON)</button>
+        <button id="import-json" class="secondary">Khôi phục (JSON)</button>
+        <input type="file" id="import-file" accept="application/json" style="display:none" />
+        <button id="reset-data" class="danger">Xóa toàn bộ dữ liệu</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Made with JavaScript - Lưu cục bộ bằng LocalStorage</small>
+  </footer>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Chi tiết hóa đơn</h3>
+        <button id="modal-close" class="secondary">Đóng</button>
+      </div>
+      <div id="modal-body"></div>
+      <div class="actions" style="justify-content:flex-end;margin-top:12px">
+        <button id="print-invoice">In hóa đơn</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Khởi tạo dữ liệu mẫu cho lần đầu
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!localStorage.getItem('products')) {
+        localStorage.setItem('products', JSON.stringify([
+          { id: 'SP001', name: 'Mì gói', price: 5000, stock: 100 },
+          { id: 'SP002', name: 'Sữa tươi', price: 22000, stock: 50 }
+        ]));
+      }
+      if (!localStorage.getItem('customers')) {
+        localStorage.setItem('customers', JSON.stringify([
+          { id: 'KH001', name: 'Nguyễn Văn A', phone: '0900000001' }
+        ]));
+      }
+      if (!localStorage.getItem('invoices')) {
+        localStorage.setItem('invoices', JSON.stringify([]));
+      }
+    });
+  </script>
+</body>
+</html>
+
+
