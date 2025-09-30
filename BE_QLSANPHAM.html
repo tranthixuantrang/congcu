@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -11,6 +11,7 @@
       background: #f9f9f9;
     }
 
+    /* Thanh menu */
     .navbar {
       display: flex;
       background: #fff;
@@ -38,6 +39,8 @@
       background: #2196f3;
       color: #fff;
     }
+
+    /* Ô tìm kiếm */
     .search-bar {
       display: flex;
       align-items: center;
@@ -49,6 +52,8 @@
       border: 1px solid #ccc;
       border-radius: 6px;
     }
+
+    /* Bảng sản phẩm */
     table {
       width: 90%;
       margin: 20px auto;
@@ -64,6 +69,7 @@
     th {
       background: #f2f2f2;
     }
+
     .custom-checkbox {
       width: 18px;
       height: 18px;
@@ -71,33 +77,86 @@
       accent-color: #007bff;
     }
 
-    /* Form thêm sản phẩm */
+    /* Form thêm sản phẩm (đã trang trí lại) */
     #addForm {
       display: none;
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #fff;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      background: #ffffff;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+      width: 320px;
+      animation: fadeIn 0.3s ease;
     }
+
+    #addForm h3 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
     #addForm input {
       display: block;
-      margin: 10px 0;
-      padding: 8px;
+      margin: 8px 0;
+      padding: 10px;
       width: 100%;
       border: 1px solid #ccc;
       border-radius: 6px;
+      transition: 0.2s;
     }
+
+    #addForm input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 3px #007bff;
+      outline: none;
+    }
+
     #addForm button {
       margin-top: 10px;
+      padding: 10px;
+      width: 48%;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #addForm button:first-of-type {
+      background: #007bff;
+      color: white;
+    }
+
+    #addForm button:last-of-type {
+      background: #dc3545;
+      color: white;
+      float: right;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translate(-50%, -48%);}
+      to {opacity: 1; transform: translate(-50%, -50%);}
+    }
+
+    /* Nền mờ */
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 5;
     }
   </style>
 </head>
+
 <body>
+  <!-- Thanh menu -->
   <div class="navbar">
     <a href="#" onclick="alert('Bạn đang ở mục Sản phẩm!')" class="active">Sản phẩm</a>
     <a href="#" onclick="alert('Chưa được code!')">Kho hàng</a>
@@ -107,10 +166,12 @@
     <button onclick="deleteSelected()">Xóa sản phẩm đã chọn</button>
   </div>
 
+  <!-- Thanh tìm kiếm -->
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Tìm kiếm..." onkeyup="searchProduct()">
   </div>
 
+  <!-- Bảng sản phẩm -->
   <table border="1" id="productTable">
     <thead>
       <tr>
@@ -123,50 +184,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
-        <td>G01</td>
-        <td>Gạo ST25</td>
-        <td>1 KG</td>
-        <td>22000</td>
-        <td>28000</td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
-        <td>M01</td>
-        <td>Mì Hảo Hảo</td>
-        <td>1 gói</td>
-        <td>4000</td>
-        <td>4500</td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
-        <td>V01</td>
-        <td>Rau muống</td>
-        <td>1 bó</td>
-        <td>6000</td>
-        <td>10000</td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
-        <td>N01</td>
-        <td>Nước suối Aquafina</td>
-        <td>1 chai</td>
-        <td>4000</td>
-        <td>6000</td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="custom-checkbox delete-checkbox"></td>
-        <td>S01</td>
-        <td>Sữa Vinamilk</td>
-        <td>1 hộp</td>
-        <td>7000</td>
-        <td>11000</td>
-      </tr>
+      <tr><td><input type="checkbox" class="custom-checkbox delete-checkbox"></td><td>G01</td><td>Gạo ST25</td><td>1 KG</td><td>22000</td><td>28000</td></tr>
+      <tr><td><input type="checkbox" class="custom-checkbox delete-checkbox"></td><td>M01</td><td>Mì Hảo Hảo</td><td>1 gói</td><td>4000</td><td>4500</td></tr>
+      <tr><td><input type="checkbox" class="custom-checkbox delete-checkbox"></td><td>V01</td><td>Rau muống</td><td>1 bó</td><td>6000</td><td>10000</td></tr>
+      <tr><td><input type="checkbox" class="custom-checkbox delete-checkbox"></td><td>N01</td><td>Nước suối Aquafina</td><td>1 chai</td><td>4000</td><td>6000</td></tr>
+      <tr><td><input type="checkbox" class="custom-checkbox delete-checkbox"></td><td>S01</td><td>Sữa Vinamilk</td><td>1 hộp</td><td>7000</td><td>11000</td></tr>
     </tbody>
   </table>
 
-  <!-- Form nhập sản phẩm -->
+  <!-- Form thêm sản phẩm -->
   <div id="addForm">
     <h3>Thêm sản phẩm</h3>
     <input type="text" id="idInput" placeholder="Mã SP">
@@ -178,6 +204,10 @@
     <button onclick="closeForm()">Hủy</button>
   </div>
 
+  <!-- Nền mờ -->
+  <div id="overlay" onclick="closeForm()"></div>
+
+  <!-- JavaScript -->
   <script>
     function searchProduct() {
       let input = document.getElementById("searchInput").value.toLowerCase();
@@ -190,10 +220,12 @@
 
     function showAddForm() {
       document.getElementById("addForm").style.display = "block";
+      document.getElementById("overlay").style.display = "block";
     }
 
     function closeForm() {
       document.getElementById("addForm").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
     }
 
     function addProduct() {
@@ -222,7 +254,7 @@
 
       table.appendChild(row);
 
-      // reset input sau khi thêm
+      // reset input
       document.getElementById("idInput").value = "";
       document.getElementById("nameInput").value = "";
       document.getElementById("unitInput").value = "";
@@ -233,11 +265,15 @@
     }
 
     function exportFile() {
-      alert("Chức năng xuất file Excel/PDF sẽ code sau!");
+      alert("Chức năng xuất file Excel/PDF sẽ được cập nhật sau!");
     }
 
     function deleteSelected() {
       const checkboxes = document.querySelectorAll(".delete-checkbox:checked");
+      if (checkboxes.length === 0) {
+        alert("Vui lòng chọn ít nhất một sản phẩm để xóa!");
+        return;
+      }
       checkboxes.forEach(cb => cb.closest("tr").remove());
     }
   </script>
