@@ -147,11 +147,43 @@
           const address = document.getElementById("address").value.trim();
           const username = document.getElementById("username").value.trim();
           const password = document.getElementById("password").value;
+          const usernameRegex = /^[a-zA-Z0-9]{6,20}$/;
+
+          const phoneRegex = /^\d{10}$/;
+          if (!phoneRegex.test(phone)) {
+            alert("Số điện thoại phải gồm đúng 10 chữ số.");
+            return;
+          }
+
+          if (
+            !fullname ||
+            !email ||
+            !phone ||
+            !address ||
+            !username ||
+            !password
+          ) {
+            alert("Vui lòng điền đầy đủ tất cả các trường thông tin.");
+            return;
+          }
+
+          if (!usernameRegex.test(username)) {
+            alert("Tên đăng nhập phải từ 6–20 ký tự, chỉ gồm chữ, số.");
+            return;
+          }
+
+          const passwordRegex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+          if (!passwordRegex.test(password)) {
+            alert(
+              "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt."
+            );
+            return;
+          }
 
           let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
           let users = JSON.parse(localStorage.getItem("users")) || [];
 
-          // Kiểm tra trùng
           if (
             accounts.find((a) => a.username === username) ||
             users.find((u) => u.email === email) ||
@@ -161,7 +193,6 @@
             return;
           }
 
-          // Lưu vào accounts
           accounts.push({
             username,
             password,
@@ -170,7 +201,6 @@
           });
           localStorage.setItem("accounts", JSON.stringify(accounts));
 
-          // Lưu vào users
           users.push({
             fullname,
             email,
