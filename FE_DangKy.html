@@ -149,6 +149,12 @@
           const password = document.getElementById("password").value;
           const usernameRegex = /^[a-zA-Z0-9]{6,20}$/;
 
+          const phoneRegex = /^\d{10}$/;
+          if (!phoneRegex.test(phone)) {
+            alert("Số điện thoại phải gồm đúng 10 chữ số.");
+            return;
+          }
+
           if (
             !fullname ||
             !email ||
